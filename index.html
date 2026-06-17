@@ -1,0 +1,1857 @@
+<!doctype html>
+<html lang="ko" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>오르리 AI동화 - 40대 이상을 위한 실전 AI 동화 제작</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PayPal JS SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AeJqAUrxCZwE7R-d2XjFRr0L1kX9ZXnsCMdLjAteJa39tlTA1yc8naNn-TABuzlVmaJRD-GRQhCIa5Wa&currency=USD"></script>
+
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Pretendard", "sans-serif"],
+            },
+            colors: {
+              wine: {
+                DEFAULT: "#5e1024",
+                dark: "#3d0a17",
+                light: "#8a1835",
+              },
+              blueGray: {
+                DEFAULT: "#64748b",
+                dark: "#334155",
+                light: "#94a3b8",
+              },
+              neon: "#00f3ff",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: "Pretendard", sans-serif;
+        word-break: keep-all;
+        background-color: #3d0a17;
+        color: #ffffff;
+      }
+
+      /* ── 스크롤바 커스텀 ── */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #3d0a17;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #00f3ff44;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #00f3ff88;
+      }
+
+      /* ── 페이드업 애니메이션 ── */
+      .fade-up-element {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .fade-up-element.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .delay-100 {
+        transition-delay: 0.1s;
+      }
+      .delay-200 {
+        transition-delay: 0.2s;
+      }
+      .delay-300 {
+        transition-delay: 0.3s;
+      }
+
+      /* ── 네온 스타일 ── */
+      .neon-band {
+        height: 2px;
+        background-color: #00f3ff;
+        box-shadow:
+          0 0 5px #00f3ff,
+          0 0 15px #00f3ff,
+          0 0 30px #00f3ff;
+        width: 100%;
+      }
+      .neon-border {
+        border: 1px solid #00f3ff;
+        box-shadow:
+          0 0 10px #00f3ff,
+          inset 0 0 10px rgba(0, 243, 255, 0.2);
+      }
+      .neon-text {
+        color: #00f3ff;
+        text-shadow: 0 0 10px #00f3ff;
+      }
+
+      /* ── 글래스모피즘 ── */
+      .glass-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.12) 0%,
+          rgba(255, 255, 255, 0.02) 100%
+        );
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.4);
+        border-left: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.4);
+      }
+
+      .hero-gradient {
+        background: linear-gradient(135deg, #3d0a17 0%, #5e1024 100%);
+      }
+
+      /* ── 파티클 배경 ── */
+      .particles-bg {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: #00f3ff;
+        opacity: 0;
+        animation: floatParticle linear infinite;
+      }
+      @keyframes floatParticle {
+        0% {
+          transform: translateY(100vh) scale(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.4;
+        }
+        90% {
+          opacity: 0.2;
+        }
+        100% {
+          transform: translateY(-10vh) scale(1);
+          opacity: 0;
+        }
+      }
+
+      /* ── 카운터 숫자 강조 ── */
+      .stat-number {
+        background: linear-gradient(90deg, #00f3ff, #ffffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ── 타임라인 ── */
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 0;
+        bottom: -2rem;
+        width: 2px;
+        background: linear-gradient(to bottom, #00f3ff, transparent);
+      }
+      .timeline-item:last-child::before {
+        display: none;
+      }
+
+      /* ── 입력 필드 오토필 스타일 덮어쓰기 ── */
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0 1000px #3d0a17 inset;
+        -webkit-text-fill-color: #fff;
+        caret-color: #fff;
+      }
+
+      /* ── 버튼 펄스 애니메이션 ── */
+      @keyframes pulse-neon {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+        50% {
+          box-shadow:
+            0 0 40px rgba(0, 243, 255, 0.7),
+            0 0 60px rgba(0, 243, 255, 0.4);
+        }
+      }
+      .pulse-neon {
+        animation: pulse-neon 2.5s ease-in-out infinite;
+      }
+
+      /* ── 헤더 스크롤 그림자 ── */
+      .header-scrolled {
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ── 책 카드 호버 ── */
+      .book-card {
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .book-card:hover {
+        transform: translateY(-8px) rotate(1deg);
+        box-shadow:
+          0 20px 40px rgba(0, 0, 0, 0.5),
+          0 0 20px rgba(0, 243, 255, 0.2);
+      }
+
+      /* ── FAQ 아코디언 ── */
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.4s ease,
+          padding 0.4s ease;
+      }
+      .faq-answer.open {
+        max-height: 300px;
+      }
+      .faq-icon {
+        transition: transform 0.3s ease;
+      }
+      .faq-item.open .faq-icon {
+        transform: rotate(45deg);
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <!-- ══════════════════════════════════════
+         HEADER / NAV
+    ══════════════════════════════════════ -->
+    <header
+      id="mainHeader"
+      class="fixed w-full top-0 z-50 bg-wine-dark/90 backdrop-blur-sm transition-all duration-300"
+    >
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex-shrink-0 flex items-center">
+            <a href="#" class="font-bold text-2xl text-white tracking-tight">
+              오르리 <span class="neon-text">AI동화</span>
+            </a>
+          </div>
+          <!-- PC 메뉴 -->
+          <nav
+            class="hidden md:flex items-center gap-6 text-sm font-medium text-blueGray-light"
+          >
+            <a href="#pain" class="hover:text-white transition-colors"
+              >이런 고민?</a
+            >
+            <a href="#story" class="hover:text-white transition-colors"
+              >오르리 이야기</a
+            >
+            <a href="#curriculum" class="hover:text-white transition-colors"
+              >커리큘럼</a
+            >
+            <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+          </nav>
+          <a
+            href="#contact"
+            class="hidden sm:inline-flex items-center justify-center px-6 py-2 text-sm font-bold rounded-full text-white bg-wine-DEFAULT neon-border hover:bg-wine-light transition-all pulse-neon"
+          >
+            상담 신청하기
+          </a>
+        </div>
+      </div>
+      <div class="neon-band"></div>
+    </header>
+
+    <main class="pt-16">
+      <!-- ══════════════════════════════════════
+             HERO SECTION
+        ══════════════════════════════════════ -->
+      <section class="hero-gradient py-28 sm:py-36 relative overflow-hidden">
+        <!-- 파티클 -->
+        <div class="particles-bg" id="particlesContainer"></div>
+        <div
+          class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blueGray-light via-transparent to-transparent"
+        ></div>
+
+        <div
+          class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center fade-up-element"
+        >
+          <span
+            class="inline-block py-1.5 px-5 rounded-full bg-blueGray-dark text-yellow-400 text-sm font-bold tracking-wider mb-6 border border-blueGray-DEFAULT shadow-md animate-bounce"
+          >
+            ✨ 40대 이상 개인사업자 맞춤형 실전 과정
+          </span>
+
+          <div class="relative">
+            <div
+              class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-[160%] bg-gray-800/90 filter blur-[50px] rounded-full pointer-events-none"
+            ></div>
+            <h1
+              class="relative z-10 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-8 leading-tight text-white drop-shadow-md"
+            >
+              컴맹이었던 제가,<br />
+              <span class="neon-text">AI로 동화책을 만들었습니다</span>
+            </h1>
+            <p
+              class="relative z-10 mt-4 text-xl sm:text-2xl text-white mb-10 max-w-2xl mx-auto leading-relaxed drop-shadow-md"
+            >
+              디지털이 낯선 4050 세대도 가능합니다.<br />
+              인건비는 줄이고, 새로운 매출을 만드는 냉철한 AI 활용법.
+            </p>
+          </div>
+
+          <div
+            class="flex flex-col sm:flex-row justify-center gap-4 relative z-10"
+          >
+            <a
+              href="#contact"
+              class="inline-flex justify-center items-center px-10 py-5 text-lg font-bold rounded-full text-wine-dark bg-neon hover:bg-white transition-all transform hover:-translate-y-1 shadow-[0_0_30px_rgba(0,243,255,0.5)] pulse-neon"
+            >
+              🚀 지금 무료로 시작하기
+            </a>
+            <a
+              href="#story"
+              class="inline-flex justify-center items-center px-10 py-5 text-lg font-bold rounded-full text-white bg-white/10 border border-white/30 hover:bg-white/20 transition-all transform hover:-translate-y-1"
+            >
+              오르리 이야기 보기 ↓
+            </a>
+          </div>
+        </div>
+
+        <!-- 실적 통계 배너 -->
+        <div class="max-w-4xl mx-auto px-4 mt-20 relative z-10">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div
+              class="glass-card rounded-2xl p-5 text-center fade-up-element delay-100"
+            >
+              <p class="stat-number text-4xl font-extrabold">
+                22<span class="text-2xl">권</span>
+              </p>
+              <p class="text-blueGray-light text-sm mt-1">POD 동화책 출간</p>
+            </div>
+            <div
+              class="glass-card rounded-2xl p-5 text-center fade-up-element delay-200"
+            >
+              <p class="stat-number text-4xl font-extrabold">
+                32<span class="text-2xl">권</span>
+              </p>
+              <p class="text-blueGray-light text-sm mt-1">총 출간 도서</p>
+            </div>
+            <div
+              class="glass-card rounded-2xl p-5 text-center fade-up-element delay-300"
+            >
+              <p class="stat-number text-4xl font-extrabold">
+                16<span class="text-2xl">개월</span>
+              </p>
+              <p class="text-blueGray-light text-sm mt-1">첫 책 후 달성 기간</p>
+            </div>
+            <div
+              class="glass-card rounded-2xl p-5 text-center fade-up-element delay-300"
+            >
+              <p class="stat-number text-4xl font-extrabold">
+                47<span class="text-2xl">세</span>
+              </p>
+              <p class="text-blueGray-light text-sm mt-1">
+                시작 나이 (컴맹→작가)
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="neon-band opacity-50"></div>
+
+      <!-- ══════════════════════════════════════
+             PAIN POINTS
+        ══════════════════════════════════════ -->
+      <section id="pain" class="py-24 bg-wine-dark">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16 fade-up-element">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+              혹시 이런 고민 있으신가요?
+            </h2>
+            <p class="text-lg text-blueGray-light">
+              시대는 변하는데 나만 멈춰있는 것 같다면 주목해주세요.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div
+              class="relative rounded-2xl overflow-hidden fade-up-element hover:-translate-y-2 transition-transform duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.5)]"
+              style="min-height: 320px"
+            >
+              <!-- 배경 이미지 -->
+              <img
+                src="images/pain1.png"
+                alt="AI가 어렵고 막막한 상황 일러스트"
+                class="absolute inset-0 w-full h-full object-cover"
+              />
+              <!-- 어두운 오버레이 -->
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20"
+              ></div>
+              <!-- 텍스트 -->
+              <div
+                class="relative z-10 p-8 flex flex-col justify-end h-full"
+                style="min-height: 320px"
+              >
+                <div class="mt-auto">
+                  <h3 class="text-xl font-bold text-white mb-3 drop-shadow-lg">
+                    AI가 어렵고 막막하다
+                  </h3>
+                  <p class="text-gray-200 leading-relaxed text-sm drop-shadow">
+                    복잡한 영어, 어려운 용어 때문에 화면만 켜놓고 한숨 쉬고
+                    계시지는 않나요?
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="relative rounded-2xl overflow-hidden fade-up-element delay-100 hover:-translate-y-2 transition-transform duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.5)]"
+              style="min-height: 320px"
+            >
+              <!-- 배경 이미지 -->
+              <img
+                src="images/pain2.png"
+                alt="시작만 하고 포기한 상황 일러스트"
+                class="absolute inset-0 w-full h-full object-cover"
+              />
+              <!-- 어두운 오버레이 -->
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20"
+              ></div>
+              <!-- 텍스트 -->
+              <div
+                class="relative z-10 p-8 flex flex-col justify-end h-full"
+                style="min-height: 320px"
+              >
+                <div class="mt-auto">
+                  <h3 class="text-xl font-bold text-white mb-3 drop-shadow-lg">
+                    시작만 하고 포기했다
+                  </h3>
+                  <p class="text-gray-200 leading-relaxed text-sm drop-shadow">
+                    인터넷 강의를 끊어놓고 따라하지 못해 중간에 포기한 경험이
+                    있으신가요?
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="relative rounded-2xl overflow-hidden fade-up-element delay-200 hover:-translate-y-2 transition-transform duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.5)]"
+              style="min-height: 320px"
+            >
+              <!-- 배경 이미지 -->
+              <img
+                src="images/pain3.png"
+                alt="글/그림 자신 없는 상황 일러스트"
+                class="absolute inset-0 w-full h-full object-cover"
+              />
+              <!-- 어두운 오버레이 -->
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20"
+              ></div>
+              <!-- 텍스트 -->
+              <div
+                class="relative z-10 p-8 flex flex-col justify-end h-full"
+                style="min-height: 320px"
+              >
+                <div class="mt-auto">
+                  <h3 class="text-xl font-bold text-white mb-3 drop-shadow-lg">
+                    글/그림 자신 없다
+                  </h3>
+                  <p class="text-gray-200 leading-relaxed text-sm drop-shadow">
+                    창작의 '창'자도 몰라 동화책은 나와 거리가 먼 이야기라고
+                    생각하시나요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 해결 메시지 -->
+          <div class="mt-16 text-center fade-up-element">
+            <div
+              class="inline-block glass-card rounded-2xl px-10 py-6 border border-neon/30"
+            >
+              <p class="text-2xl font-bold text-white">
+                그 모든 고민, <span class="neon-text">오르리 AI동화</span>가
+                해결해드립니다. 👋
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+             WHY AI FAIRY TALE (정확한 방법)
+        ══════════════════════════════════════ -->
+      <section class="py-24 bg-wine-DEFAULT relative overflow-hidden">
+        <div class="absolute inset-0 bg-blueGray-dark/20"></div>
+        <div
+          class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 fade-up-element"
+        >
+          <div class="glass-card rounded-3xl p-8 sm:p-12">
+            <div class="text-center mb-12 relative">
+              <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 sm:w-1/2 h-[150%] bg-gray-800/80 filter blur-[40px] rounded-full pointer-events-none z-0"
+              ></div>
+              <h2
+                class="relative z-10 text-3xl sm:text-4xl font-bold text-white mb-4 drop-shadow-md"
+              >
+                정확한 방법만 알면 됩니다
+              </h2>
+              <div class="relative z-10 w-24 mx-auto">
+                <div class="neon-band"></div>
+              </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-10">
+              <!-- 일러스트 영역 -->
+              <div class="w-full md:w-1/2 flex justify-center">
+                <div
+                  class="relative w-3/4 md:w-full max-w-sm rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-neon/30 group bg-wine-dark flex items-center justify-center aspect-[1/1]"
+                >
+                  <img
+                    src="illustration.png"
+                    alt="AI 동화 일러스트"
+                    class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-wine-dark/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  ></div>
+                </div>
+              </div>
+
+              <!-- 텍스트 영역 -->
+              <div class="w-full md:w-1/2 text-left">
+                <p class="text-2xl text-white font-bold leading-relaxed mb-6">
+                  "AI 동화 제작은 재능의 영역이 아닙니다.<br />
+                  <span class="neon-text text-3xl"
+                    >도구를 활용하는 기술입니다.</span
+                  >"
+                </p>
+                <p class="text-lg text-blueGray-light leading-relaxed mb-4">
+                  붓을 한 번도 잡아본 적 없어도 괜찮습니다.<br />
+                  정확한 프롬프트(명령어)와 도구만 알면 누구나 단 몇 분 만에
+                  전문가 수준의 그림을 뽑아낼 수 있습니다.
+                </p>
+                <p class="text-lg text-white font-medium leading-relaxed">
+                  비현실적인 꿈이 아닌, 실제 외주 비용을 방어하고 새로운 매출
+                  파이프라인으로 이어지는
+                  <strong class="text-white relative inline-block">
+                    가장 현실적인 방법
+                    <span
+                      class="absolute -bottom-1 left-0 w-full h-[3px] bg-neon shadow-[0_0_10px_#00f3ff,0_0_20px_#00f3ff] rounded-full"
+                    ></span> </strong
+                  >을 알려드립니다.
+                </p>
+
+                <!-- 핵심 도구 3가지 -->
+                <div class="mt-8 grid grid-cols-3 gap-3">
+                  <div
+                    class="glass-card rounded-xl p-3 text-center border border-neon/20"
+                  >
+                    <p class="text-neon font-bold text-sm">ChatGPT</p>
+                    <p class="text-blueGray-light text-xs mt-1">스토리 창작</p>
+                  </div>
+                  <div
+                    class="glass-card rounded-xl p-3 text-center border border-neon/20"
+                  >
+                    <p class="text-neon font-bold text-sm">Midjourney</p>
+                    <p class="text-blueGray-light text-xs mt-1">그림 생성</p>
+                  </div>
+                  <div
+                    class="glass-card rounded-xl p-3 text-center border border-neon/20"
+                  >
+                    <p class="text-neon font-bold text-sm">Canva</p>
+                    <p class="text-blueGray-light text-xs mt-1">편집 & 출판</p>
+                  </div>
+                </div>
+
+                <div class="mt-8">
+                  <a
+                    href="javascript:void(0)"
+                    onclick="openComingSoon()"
+                    class="inline-flex items-center px-6 py-3 border border-neon text-neon font-bold rounded-xl hover:bg-neon hover:text-wine-dark transition-all duration-300 shadow-[0_0_15px_rgba(0,243,255,0.2)]"
+                  >
+                    <span>상세 안내 보기</span>
+                    <svg
+                      class="w-5 h-5 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      ></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+             STORY SECTION (오르리 이야기)
+        ══════════════════════════════════════ -->
+      <section id="story" class="py-24 bg-wine-dark relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            class="glass-card rounded-3xl p-8 sm:p-12 text-white fade-up-element flex flex-col md:flex-row items-center gap-12 relative overflow-hidden"
+          >
+            <div
+              class="absolute -top-20 -right-20 w-64 h-64 bg-gray-600 rounded-full filter blur-[100px] opacity-40"
+            ></div>
+
+            <!-- 프로필 사진 -->
+            <div
+              class="w-full md:w-1/3 flex flex-col items-center gap-4 relative z-10"
+            >
+              <div
+                class="w-56 h-56 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-neon/30 shadow-[0_0_30px_rgba(0,243,255,0.2)] group relative bg-wine-DEFAULT flex items-center justify-center"
+              >
+                <img
+                  src="profile.png"
+                  alt="오르리 대표"
+                  class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+              <div class="text-center">
+                <p class="font-bold text-xl text-white">오르리 (엄인숙)</p>
+                <p class="text-neon text-sm font-medium">
+                  AI 동화 작가 · 창작 교육자
+                </p>
+                <p class="text-blueGray-light text-sm mt-1">
+                  동화책 22권 · 총 32권 출간
+                </p>
+              </div>
+            </div>
+
+            <!-- 스토리 텍스트 -->
+            <div class="flex-1 text-left relative z-10">
+              <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-white">
+                저도 한때는<br /><span class="neon-text"
+                  >일상의 의미를 잃었었습니다</span
+                >
+              </h2>
+
+              <div
+                class="space-y-5 text-lg text-blueGray-light leading-relaxed"
+              >
+                <p>
+                  저는 한때 우울증과 공황장애로 일상의 의미를 잃고 살아가고
+                  있었습니다.<br />
+                  하루하루 버티는 삶이었고, 제 존재감조차 느끼기 어려웠습니다.
+                </p>
+                <p>
+                  그러다 시작한 AI 동화.<br />
+                  처음에는 단순히 AI에 익숙해지고 싶다는 마음이었습니다.<br />
+                  하지만 동화를 만들면서 제 안의 감정이 풀리기 시작했습니다.
+                </p>
+
+                <div
+                  class="p-6 mt-6 rounded-2xl bg-gray-800/60 backdrop-blur-md border border-neon/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                >
+                  <p
+                    class="text-white font-semibold text-xl mb-2 drop-shadow-sm"
+                  >
+                    "창작이 나를 회복시킨다."
+                  </p>
+                </div>
+
+                <p class="text-yellow-400 font-bold text-xl pt-2">
+                  지금의 저는, 다시 도전하는 사람이 되었습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="neon-band opacity-50"></div>
+
+      <!-- ══════════════════════════════════════
+             BENEFITS (변화)
+        ══════════════════════════════════════ -->
+      <section class="py-24 bg-wine-dark">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16 fade-up-element">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+              당신도 이렇게 변할 수 있습니다
+            </h2>
+            <p class="text-lg text-blueGray-light">
+              오르리 AI동화와 함께라면 상상이 현실이 됩니다.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div
+              class="glass-card p-8 rounded-2xl flex flex-col items-center text-center fade-up-element hover:-translate-y-2 transition-transform duration-300"
+            >
+              <span
+                class="text-5xl mb-5 drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]"
+                >📖</span
+              >
+              <h3 class="text-2xl font-bold text-white mb-3">
+                나만의 동화책 출판
+              </h3>
+              <p class="text-blueGray-light leading-relaxed">
+                머릿속 아이디어가 실제 책으로 탄생하는 기적을 경험하세요.
+              </p>
+            </div>
+            <div
+              class="glass-card p-8 rounded-2xl flex flex-col items-center text-center fade-up-element delay-100 hover:-translate-y-2 transition-transform duration-300"
+            >
+              <span
+                class="text-5xl mb-5 drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]"
+                >📈</span
+              >
+              <h3 class="text-2xl font-bold text-white mb-3">
+                매출 및 업무 효율 증대
+              </h3>
+              <p class="text-blueGray-light leading-relaxed">
+                사업에 AI를 접목하여 외주 비용을 줄이고 새로운 파이프라인을
+                구축하세요.
+              </p>
+            </div>
+            <div
+              class="glass-card p-8 rounded-2xl flex flex-col items-center text-center fade-up-element delay-200 hover:-translate-y-2 transition-transform duration-300"
+            >
+              <span
+                class="text-5xl mb-5 drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]"
+                >🔥</span
+              >
+              <h3 class="text-2xl font-bold text-white mb-3">
+                떨어진 자존감 회복
+              </h3>
+              <p class="text-blueGray-light leading-relaxed">
+                "나도 할 수 있다"는 강력한 자신감을 얻고 디지털 트렌드를
+                선도하세요.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+             CURRICULUM (커리큘럼)
+        ══════════════════════════════════════ -->
+      <section
+        id="curriculum"
+        class="py-24 bg-wine-DEFAULT relative overflow-hidden"
+      >
+        <div class="absolute inset-0 bg-blueGray-dark/10"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="text-center mb-16 fade-up-element">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+              이렇게 진행됩니다
+            </h2>
+            <p class="text-lg text-blueGray-light">
+              단계별 실전 커리큘럼 — 따라만 하면 완성됩니다
+            </p>
+          </div>
+
+          <div class="space-y-8">
+            <!-- STEP 1 -->
+            <div class="fade-up-element">
+              <div
+                class="glass-card rounded-2xl p-7 flex flex-col sm:flex-row items-start gap-6 hover:-translate-y-1 transition-transform duration-300"
+              >
+                <div
+                  class="flex-shrink-0 w-14 h-14 rounded-full bg-neon/10 border border-neon/40 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.2)]"
+                >
+                  <span class="text-neon font-extrabold text-lg">01</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-white mb-2">
+                    AI 도구 기초 입문
+                    <span class="text-sm text-neon font-normal ml-2"
+                      >ChatGPT · Midjourney · Canva</span
+                    >
+                  </h3>
+                  <p class="text-blueGray-light leading-relaxed">
+                    독수리 타법도 OK! 세 가지 핵심 도구를 처음부터 차근차근.
+                    회원가입부터 첫 프롬프트 입력까지 화면을 보며 함께 합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- STEP 2 -->
+            <div class="fade-up-element delay-100">
+              <div
+                class="glass-card rounded-2xl p-7 flex flex-col sm:flex-row items-start gap-6 hover:-translate-y-1 transition-transform duration-300"
+              >
+                <div
+                  class="flex-shrink-0 w-14 h-14 rounded-full bg-neon/10 border border-neon/40 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.2)]"
+                >
+                  <span class="text-neon font-extrabold text-lg">02</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-white mb-2">
+                    나만의 스토리 만들기
+                    <span class="text-sm text-neon font-normal ml-2"
+                      >로그라인 → 30페이지 초안</span
+                    >
+                  </h3>
+                  <p class="text-blueGray-light leading-relaxed">
+                    ChatGPT와 협업해 아이디어를 감동적인 이야기로 발전시킵니다.
+                    '추론(논리적 흐름)'과 '결론(메시지)' 구조로 깊이 있는 동화를
+                    완성하세요.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- STEP 3 -->
+            <div class="fade-up-element delay-200">
+              <div
+                class="glass-card rounded-2xl p-7 flex flex-col sm:flex-row items-start gap-6 hover:-translate-y-1 transition-transform duration-300"
+              >
+                <div
+                  class="flex-shrink-0 w-14 h-14 rounded-full bg-neon/10 border border-neon/40 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.2)]"
+                >
+                  <span class="text-neon font-extrabold text-lg">03</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-white mb-2">
+                    AI 그림 생성 실전
+                    <span class="text-sm text-neon font-normal ml-2"
+                      >Midjourney 프롬프트 마스터</span
+                    >
+                  </h3>
+                  <p class="text-blueGray-light leading-relaxed">
+                    수십만 원짜리 외주 없이 감성적인 동화 일러스트를 직접
+                    만듭니다. 스타일 통일, 캐릭터 일관성 유지 비법을 전수합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- STEP 4 -->
+            <div class="fade-up-element delay-300">
+              <div
+                class="glass-card rounded-2xl p-7 flex flex-col sm:flex-row items-start gap-6 hover:-translate-y-1 transition-transform duration-300"
+              >
+                <div
+                  class="flex-shrink-0 w-14 h-14 rounded-full bg-neon/10 border border-neon/40 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.2)]"
+                >
+                  <span class="text-neon font-extrabold text-lg">04</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-white mb-2">
+                    책 편집 & POD 출판
+                    <span class="text-sm text-neon font-normal ml-2"
+                      >Canva → 실물 책 완성</span
+                    >
+                  </h3>
+                  <p class="text-blueGray-light leading-relaxed">
+                    Canva로 책 내지를 디자인하고 POD(주문 제작) 플랫폼에
+                    등록합니다. 재고 없이 판매하는 수익 구조를 완성하세요.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+             CTA BANNER
+        ══════════════════════════════════════ -->
+      <section
+        class="py-24 bg-blueGray-dark relative border-y border-neon text-center overflow-hidden"
+      >
+        <div
+          class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gray-800 rounded-full filter blur-[150px] opacity-60"
+        ></div>
+
+        <div
+          class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 fade-up-element relative z-10"
+        >
+          <h2 class="text-3xl sm:text-5xl font-extrabold mb-6 text-white">
+            이번엔 <span class="neon-text">포기하지 않게</span> 해드립니다
+          </h2>
+          <p class="text-xl text-blueGray-light mb-10">
+            망설임은 시간만 늦출 뿐입니다. 40대 이상 맞춤형 1:1 밀착 관리를 지금
+            바로 경험해보세요.
+          </p>
+          <a
+            href="#contact"
+            class="inline-flex justify-center items-center px-10 py-5 text-xl font-bold rounded-full text-wine-dark bg-white hover:bg-gray-200 transition-colors shadow-[0_0_20px_#00f3ff] pulse-neon"
+          >
+            무료 상담 신청하기 →
+          </a>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+             FAQ
+        ══════════════════════════════════════ -->
+      <section id="faq" class="py-24 bg-wine-dark">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16 fade-up-element">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+              자주 묻는 질문
+            </h2>
+            <p class="text-blueGray-light">궁금하신 점을 먼저 확인해보세요!</p>
+          </div>
+
+          <div class="space-y-4 fade-up-element">
+            <!-- FAQ 1 -->
+            <div
+              class="faq-item glass-card rounded-2xl overflow-hidden cursor-pointer"
+              onclick="toggleFaq(this)"
+            >
+              <div class="flex justify-between items-center p-6">
+                <p class="font-bold text-white pr-4">
+                  컴퓨터를 정말 못해도 따라갈 수 있나요?
+                </p>
+                <span class="faq-icon text-neon text-2xl flex-shrink-0">+</span>
+              </div>
+              <div class="faq-answer px-6 text-blueGray-light leading-relaxed">
+                <p class="pb-6">
+                  네, 물론입니다! 오르리 대표님 본인이 47세에 독수리 타법으로
+                  시작하셨습니다. 마우스 클릭부터 함께 시작하니 걱정 마세요.
+                  포기하지 않도록 1:1로 밀착 케어해드립니다.
+                </p>
+              </div>
+            </div>
+            <!-- FAQ 2 -->
+            <div
+              class="faq-item glass-card rounded-2xl overflow-hidden cursor-pointer"
+              onclick="toggleFaq(this)"
+            >
+              <div class="flex justify-between items-center p-6">
+                <p class="font-bold text-white pr-4">비용은 얼마나 드나요?</p>
+                <span class="faq-icon text-neon text-2xl flex-shrink-0">+</span>
+              </div>
+              <div class="faq-answer px-6 text-blueGray-light leading-relaxed">
+                <p class="pb-6">
+                  상담을 통해 개인 상황에 맞는 최적의 플랜을 안내드립니다. 지금
+                  상담을 신청하시면 맞춤 견적과 함께 무료로 첫 방향 컨설팅을
+                  받아보실 수 있습니다.
+                </p>
+              </div>
+            </div>
+            <!-- FAQ 3 -->
+            <div
+              class="faq-item glass-card rounded-2xl overflow-hidden cursor-pointer"
+              onclick="toggleFaq(this)"
+            >
+              <div class="flex justify-between items-center p-6">
+                <p class="font-bold text-white pr-4">
+                  동화책을 만들면 실제로 판매가 가능한가요?
+                </p>
+                <span class="faq-icon text-neon text-2xl flex-shrink-0">+</span>
+              </div>
+              <div class="faq-answer px-6 text-blueGray-light leading-relaxed">
+                <p class="pb-6">
+                  네! POD(주문 제작 출판) 방식으로 재고 없이 온라인에서 판매할
+                  수 있습니다. 오르리 대표님도 이 방법으로 22권을 출간·판매
+                  중이십니다. 과정을 마치시면 여러분도 바로 등록 가능합니다.
+                </p>
+              </div>
+            </div>
+            <!-- FAQ 4 -->
+            <div
+              class="faq-item glass-card rounded-2xl overflow-hidden cursor-pointer"
+              onclick="toggleFaq(this)"
+            >
+              <div class="flex justify-between items-center p-6">
+                <p class="font-bold text-white pr-4">
+                  영어를 못해도 Midjourney를 사용할 수 있나요?
+                </p>
+                <span class="faq-icon text-neon text-2xl flex-shrink-0">+</span>
+              </div>
+              <div class="faq-answer px-6 text-blueGray-light leading-relaxed">
+                <p class="pb-6">
+                  ChatGPT가 한글 내용을 영어 프롬프트로 번역해줍니다. 즉, 영어를
+                  몰라도 전혀 문제없습니다! 두 도구를 함께 활용하는 노하우를
+                  쉽게 익힐 수 있도록 알려드립니다.
+                </p>
+              </div>
+            </div>
+            <!-- FAQ 5 -->
+            <div
+              class="faq-item glass-card rounded-2xl overflow-hidden cursor-pointer"
+              onclick="toggleFaq(this)"
+            >
+              <div class="flex justify-between items-center p-6">
+                <p class="font-bold text-white pr-4">
+                  온라인으로도 수강이 가능한가요?
+                </p>
+                <span class="faq-icon text-neon text-2xl flex-shrink-0">+</span>
+              </div>
+              <div class="faq-answer px-6 text-blueGray-light leading-relaxed">
+                <p class="pb-6">
+                  네, 100% 비대면 온라인으로 진행됩니다. 전국 어디서든
+                  스마트폰이나 PC만 있으면 참여 가능합니다. 화상 미팅으로 직접
+                  화면을 보며 진행하니 오프라인 못지않게 밀도 있게 배우실 수
+                  있습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+             PAYMENT TEST SECTION (송비의 결제 시스템)
+         ══════════════════════════════════════ -->
+      <section id="payment-test" class="py-24 bg-wine-dark relative overflow-hidden">
+        <div class="absolute inset-0 bg-blueGray-dark/10"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 fade-up-element">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+              ✨ 송비의 결제 시스템
+            </h2>
+            <p class="text-lg text-blueGray-light">
+              PayPal을 통해 1달러, 3달러, 5달러 소액 결제를 안전하게 테스트해보세요.
+            </p>
+          </div>
+
+          <div class="glass-card rounded-3xl p-8 sm:p-12 border border-neon/20">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+              <!-- Card 1 -->
+              <div
+                id="amount-card-1"
+                onclick="selectAmount('1.00', 'amount-card-1')"
+                class="payment-amount-card cursor-pointer glass-card p-6 rounded-2xl flex flex-col items-center text-center border-2 border-transparent hover:border-neon/30 transition-all duration-300 relative group"
+              >
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-blueGray-dark rounded-full text-xs text-yellow-400 font-bold border border-blueGray-DEFAULT opacity-0 group-hover:opacity-100 transition-opacity">
+                  기본 테스트 ☕
+                </div>
+                <span class="text-4xl mb-4">☕</span>
+                <h3 class="text-xl font-bold text-white mb-1">커피 한 잔 후원</h3>
+                <p class="text-neon text-3xl font-extrabold my-3">$1.00</p>
+                <p class="text-xs text-blueGray-light leading-relaxed">
+                  가장 심플한 1달러 결제 테스트를 진행합니다.
+                </p>
+              </div>
+
+              <!-- Card 2 -->
+              <div
+                id="amount-card-3"
+                onclick="selectAmount('3.00', 'amount-card-3')"
+                class="payment-amount-card cursor-pointer glass-card p-6 rounded-2xl flex flex-col items-center text-center border-2 border-transparent hover:border-neon/30 transition-all duration-300 relative group"
+              >
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-blueGray-dark rounded-full text-xs text-yellow-400 font-bold border border-blueGray-DEFAULT opacity-0 group-hover:opacity-100 transition-opacity">
+                  인기 항목 🍰
+                </div>
+                <span class="text-4xl mb-4">🍰</span>
+                <h3 class="text-xl font-bold text-white mb-1">조각 케이크 후원</h3>
+                <p class="text-neon text-3xl font-extrabold my-3">$3.00</p>
+                <p class="text-xs text-blueGray-light leading-relaxed">
+                  중간 단위의 3달러 결제 테스트를 진행합니다.
+                </p>
+              </div>
+
+              <!-- Card 3 -->
+              <div
+                id="amount-card-5"
+                onclick="selectAmount('5.00', 'amount-card-5')"
+                class="payment-amount-card cursor-pointer glass-card p-6 rounded-2xl flex flex-col items-center text-center border-2 border-transparent hover:border-neon/30 transition-all duration-300 relative group"
+              >
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-blueGray-dark rounded-full text-xs text-yellow-400 font-bold border border-blueGray-DEFAULT opacity-0 group-hover:opacity-100 transition-opacity">
+                  통 큰 응원 🎬
+                </div>
+                <span class="text-4xl mb-4">🎬</span>
+                <h3 class="text-xl font-bold text-white mb-1">영화 한 편 후원</h3>
+                <p class="text-neon text-3xl font-extrabold my-3">$5.00</p>
+                <p class="text-xs text-blueGray-light leading-relaxed">
+                  든든한 응원의 5달러 결제 테스트를 진행합니다.
+                </p>
+              </div>
+            </div>
+
+            <!-- PayPal Button Container -->
+            <div class="max-w-md mx-auto">
+              <div class="text-center mb-4">
+                <span class="inline-block py-1 px-4 bg-white/5 rounded-full text-sm text-blueGray-light border border-white/10">
+                  선택한 결제 금액: <strong id="selected-amount-display" class="text-neon">$1.00</strong>
+                </span>
+              </div>
+              <div id="paypal-button-container" class="relative z-10"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+             CONTACT SECTION
+        ══════════════════════════════════════ -->
+      <section
+        id="contact"
+        class="py-24 bg-wine-DEFAULT relative overflow-hidden"
+      >
+        <div class="absolute inset-0 bg-blueGray-dark/20"></div>
+        <div
+          class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 fade-up-element"
+        >
+          <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+              지금 바로 시작하세요
+            </h2>
+            <p class="text-lg text-blueGray-light">
+              간단한 정보만 남겨주시면, 친절하게 상담해 드립니다.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <!-- 폼 -->
+            <div class="glass-card rounded-3xl p-8 sm:p-10">
+              <h3
+                class="text-xl font-bold text-white mb-6 flex items-center gap-2"
+              >
+                <span class="text-neon">✉</span> 상담 신청 폼
+              </h3>
+              <form
+                id="consultForm"
+                onsubmit="submitForm(event)"
+                class="space-y-5"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-blueGray-light mb-2"
+                    >성함 <span class="text-red-400">*</span></label
+                  >
+                  <input
+                    id="inputName"
+                    type="text"
+                    required
+                    class="w-full px-5 py-4 bg-wine-dark/50 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-neon focus:ring-1 focus:ring-neon transition-colors"
+                    placeholder="홍길동"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-blueGray-light mb-2"
+                    >연락처 <span class="text-red-400">*</span></label
+                  >
+                  <input
+                    id="inputPhone"
+                    type="tel"
+                    required
+                    class="w-full px-5 py-4 bg-wine-dark/50 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-neon focus:ring-1 focus:ring-neon transition-colors"
+                    placeholder="010-1234-5678"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-blueGray-light mb-2"
+                    >관심 분야</label
+                  >
+                  <select
+                    id="inputInterest"
+                    class="w-full px-5 py-4 bg-wine-dark/50 border border-white/20 rounded-xl text-white focus:outline-none focus:border-neon focus:ring-1 focus:ring-neon transition-colors appearance-none cursor-pointer"
+                  >
+                    <option value="" class="bg-wine-dark">
+                      선택해주세요 (선택 사항)
+                    </option>
+                    <option value="동화책 출판" class="bg-wine-dark">
+                      동화책 출판
+                    </option>
+                    <option value="사업 AI 활용" class="bg-wine-dark">
+                      사업에 AI 활용
+                    </option>
+                    <option value="부업/수익화" class="bg-wine-dark">
+                      부업 / 수익화
+                    </option>
+                    <option value="자존감 향상" class="bg-wine-dark">
+                      자존감 향상 & 창작 치유
+                    </option>
+                    <option value="기타" class="bg-wine-dark">기타</option>
+                  </select>
+                </div>
+                <button
+                  id="submitBtn"
+                  type="submit"
+                  class="w-full py-5 mt-2 bg-neon text-wine-dark font-bold text-xl rounded-xl hover:bg-white transition-colors shadow-[0_0_20px_rgba(0,243,255,0.3)] pulse-neon flex items-center justify-center gap-2"
+                >
+                  <span id="submitText">상담 신청 완료하기 🚀</span>
+                  <svg
+                    id="submitSpinner"
+                    class="hidden w-5 h-5 animate-spin"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8z"
+                    ></path>
+                  </svg>
+                </button>
+              </form>
+            </div>
+
+            <!-- 연락처 정보 -->
+            <div class="flex flex-col gap-6">
+              <div
+                class="glass-card rounded-3xl p-8 sm:p-10 flex-1 flex flex-col justify-center"
+              >
+                <h3 class="text-xl font-bold text-white mb-6 text-center">
+                  빠른 문의가 필요하시다면?
+                </h3>
+                <a
+                  href="http://pf.kakao.com/_eDxmrn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center p-5 bg-[#FEE500] rounded-2xl text-black hover:bg-[#e6cf00] transition-colors mb-4 shadow-lg group"
+                >
+                  <svg
+                    class="w-8 h-8 mr-4 flex-shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 4C6.48 4 2 7.58 2 12c0 2.84 1.84 5.34 4.68 6.72-.2.72-1.32 4.46-1.34 4.54-.04.14.06.28.18.28.06 0 .12-.02.16-.06 0 0 5.2-3.44 6.06-4.02.4.04.82.06 1.26.06 5.52 0 10-3.58 10-8s-4.48-8-10-8z"
+                    />
+                  </svg>
+                  <span class="font-bold text-lg flex-1 text-center"
+                    >카카오톡으로 바로 문의하기</span
+                  >
+                </a>
+                <a
+                  href="tel:010-4712-5597"
+                  class="flex items-center p-5 bg-wine-dark/50 border border-white/20 rounded-2xl text-white hover:border-neon/50 transition-colors shadow-lg"
+                >
+                  <div
+                    class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mr-4 flex-shrink-0"
+                  >
+                    <svg
+                      class="w-6 h-6 text-neon"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="text-left">
+                    <p class="text-sm text-blueGray-light mb-1">전화 상담</p>
+                    <p class="font-bold text-xl tracking-wider">
+                      010-4712-5597
+                    </p>
+                  </div>
+                </a>
+              </div>
+
+              <!-- 안내 카드 -->
+              <div
+                class="glass-card rounded-3xl p-6 border border-yellow-400/20"
+              >
+                <p
+                  class="text-yellow-400 font-bold text-sm mb-3 flex items-center gap-2"
+                >
+                  <span>⏰</span> 상담 진행 안내
+                </p>
+                <ul
+                  class="text-blueGray-light text-sm space-y-2 leading-relaxed"
+                >
+                  <li class="flex items-start gap-2">
+                    <span class="text-neon mt-0.5">✓</span> 신청 후 1~2일 내
+                    연락드립니다
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-neon mt-0.5">✓</span> 첫 상담은 무료로
+                    진행됩니다
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-neon mt-0.5">✓</span> 비대면 온라인 상담
+                    가능합니다
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-neon mt-0.5">✓</span> 부담 없이 궁금한
+                    점을 물어보세요
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="neon-band"></div>
+
+    <!-- ══════════════════════════════════════
+         FOOTER
+    ══════════════════════════════════════ -->
+    <footer class="bg-wine-dark text-blueGray-light py-14">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+          <!-- 브랜드 -->
+          <div>
+            <p class="font-bold text-2xl text-white mb-3">
+              오르리 <span class="neon-text">AI동화</span>
+            </p>
+            <p class="text-sm leading-relaxed">
+              47세 컴맹에서 AI 동화 작가·교육자로.<br />
+              당신의 창작 여정을 응원합니다.
+            </p>
+          </div>
+          <!-- 빠른 링크 -->
+          <div>
+            <p class="font-bold text-white mb-4">빠른 이동</p>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a
+                  href="#pain"
+                  class="hover:text-white hover:neon-text transition-colors"
+                  >이런 고민?</a
+                >
+              </li>
+              <li>
+                <a href="#story" class="hover:text-white transition-colors"
+                  >오르리 이야기</a
+                >
+              </li>
+              <li>
+                <a href="#curriculum" class="hover:text-white transition-colors"
+                  >커리큘럼</a
+                >
+              </li>
+              <li>
+                <a href="#faq" class="hover:text-white transition-colors"
+                  >FAQ</a
+                >
+              </li>
+              <li>
+                <a href="#contact" class="hover:text-white transition-colors"
+                  >상담 신청</a
+                >
+              </li>
+            </ul>
+          </div>
+          <!-- 연락처 -->
+          <div>
+            <p class="font-bold text-white mb-4">연락처</p>
+            <div class="space-y-2 text-sm">
+              <p>
+                📞
+                <a
+                  href="tel:010-4712-5597"
+                  class="hover:text-white transition-colors"
+                  >010-4712-5597</a
+                >
+              </p>
+              <p>
+                💬
+                <a
+                  href="http://pf.kakao.com/_eDxmrn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="hover:text-white transition-colors"
+                  >카카오톡 채널 문의</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="border-t border-white/10 pt-6 text-center text-xs text-blueGray-light/60"
+        >
+          <p>© 2025 오르리 AI동화 · 오르리(엄인숙). All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ══════════════════════════════════════
+         FLOATING BUTTONS
+    ══════════════════════════════════════ -->
+    <!-- 카카오 플로팅 -->
+    <a
+      href="http://pf.kakao.com/_eDxmrn"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="fixed bottom-24 right-6 w-14 h-14 bg-[#FEE500] rounded-full shadow-[0_0_15px_rgba(254,229,0,0.5)] flex items-center justify-center hover:scale-110 transition-transform z-50"
+      title="카카오톡 문의"
+    >
+      <svg class="w-8 h-8 text-black" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M12 4C6.48 4 2 7.58 2 12c0 2.84 1.84 5.34 4.68 6.72-.2.72-1.32 4.46-1.34 4.54-.04.14.06.28.18.28.06 0 .12-.02.16-.06 0 0 5.2-3.44 6.06-4.02.4.04.82.06 1.26.06 5.52 0 10-3.58 10-8s-4.48-8-10-8z"
+        />
+      </svg>
+    </a>
+
+    <!-- 맨위로 -->
+    <button
+      id="scrollTopBtn"
+      onclick="scrollToTop()"
+      class="fixed bottom-6 right-6 w-14 h-14 bg-wine-dark/80 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(0,243,255,0.3)] flex items-center justify-center hover:scale-110 transition-all z-50 border border-white/20 text-white opacity-0 pointer-events-none"
+      title="맨 위로"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 10l7-7m0 0l7 7m-7-7v18"
+        ></path>
+      </svg>
+    </button>
+
+    <!-- 배경음악 -->
+    <audio id="bgMusic" loop>
+      <source src="bgm.mp3" type="audio/mpeg" />
+    </audio>
+    <button
+      id="bgmToggleBtn"
+      onclick="toggleBgm()"
+      class="fixed bottom-6 left-6 w-14 h-14 bg-wine-dark/80 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(0,243,255,0.3)] flex items-center justify-center hover:scale-110 transition-all z-50 border border-white/20 text-white"
+      title="배경음악 재생/정지"
+    >
+      <svg
+        id="playIcon"
+        class="w-6 h-6"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M8 5v14l11-7z" />
+      </svg>
+      <svg
+        id="pauseIcon"
+        class="w-6 h-6 hidden"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+      </svg>
+    </button>
+
+    <!-- ══════════════════════════════════════
+         MODALS
+    ══════════════════════════════════════ -->
+    <!-- 결제 성공 모달 -->
+    <div
+      id="paymentSuccessModal"
+      class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-300 opacity-0"
+    >
+      <div
+        class="glass-card rounded-3xl p-10 max-w-sm w-full mx-4 text-center transform scale-95 transition-transform duration-300 border border-neon/50"
+      >
+        <div
+          class="w-20 h-20 mx-auto bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-6 border border-green-500/30 shadow-[0_0_15px_rgba(74,222,128,0.3)]"
+        >
+          <svg
+            class="w-10 h-10"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-white mb-3">
+          결제가 완료되었습니다! 🎉
+        </h3>
+        <p id="paymentSuccessMsg" class="text-blueGray-light mb-8 leading-relaxed">
+          감사합니다! 후원/테스트 결제가 성공적으로 완료되었습니다.
+        </p>
+        <button
+          onclick="closePaymentModal()"
+          class="w-full py-4 bg-white text-wine-dark font-bold text-lg rounded-xl hover:bg-gray-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+        >
+          확인
+        </button>
+      </div>
+    </div>
+
+    <!-- Coming Soon 모달 -->
+    <div
+      id="comingSoonModal"
+      class="fixed inset-0 z-[100] hidden items-center justify-center bg-wine-dark/95 backdrop-blur-md transition-opacity duration-300 opacity-0"
+    >
+      <div
+        class="glass-card rounded-3xl p-10 max-w-md w-full mx-4 text-center transform scale-95 transition-transform duration-300 border border-white/20"
+      >
+        <div
+          class="w-20 h-20 mx-auto bg-blueGray-dark text-yellow-400 rounded-full flex items-center justify-center mb-6 border border-white/10 shadow-[0_0_15px_rgba(255,235,59,0.3)]"
+        >
+          <svg
+            class="w-10 h-10"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-white mb-3">
+          더 알찬 내용을<br /><span class="text-neon">준비하고 있습니다</span>
+        </h3>
+        <p class="text-blueGray-light mb-8 leading-relaxed">
+          대표님들께 꼭 필요한 실전 노하우와<br />상세한 커리큘럼을 정성껏
+          다듬는 중입니다.<br />곧 멋진 모습으로 찾아뵙겠습니다!
+        </p>
+        <button
+          onclick="closeComingSoon()"
+          class="w-full py-4 bg-white text-wine-dark font-bold text-lg rounded-xl hover:bg-gray-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+        >
+          이전 화면으로 돌아가기
+        </button>
+      </div>
+    </div>
+
+    <!-- 성공 모달 -->
+    <div
+      id="successModal"
+      class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-300 opacity-0"
+    >
+      <div
+        class="glass-card rounded-3xl p-10 max-w-sm w-full mx-4 text-center transform scale-95 transition-transform duration-300 border border-neon/50"
+      >
+        <div
+          class="w-20 h-20 mx-auto bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-6 border border-green-500/30"
+        >
+          <svg
+            class="w-10 h-10"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-white mb-3">
+          신청이 완료되었습니다! 🎉
+        </h3>
+        <p class="text-blueGray-light mb-8 leading-relaxed">
+          남겨주신 연락처로 곧 안내 전화를 드리겠습니다.<br />조금만
+          기다려주세요.
+        </p>
+        <button
+          onclick="closeModal()"
+          class="w-full py-4 bg-white text-wine-dark font-bold text-lg rounded-xl hover:bg-gray-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+        >
+          확인
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         JAVASCRIPT
+    ══════════════════════════════════════ -->
+    <script>
+      /* ── 1. IntersectionObserver: 페이드업 ── */
+      document.addEventListener("DOMContentLoaded", () => {
+        const fadeEls = document.querySelectorAll(".fade-up-element");
+        const observer = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { root: null, rootMargin: "0px", threshold: 0.12 },
+        );
+        fadeEls.forEach((el) => observer.observe(el));
+
+        /* ── 파티클 생성 ── */
+        const container = document.getElementById("particlesContainer");
+        if (container) {
+          for (let i = 0; i < 20; i++) {
+            const p = document.createElement("div");
+            p.className = "particle";
+            const size = Math.random() * 4 + 2;
+            p.style.cssText = `
+                        width: ${size}px; height: ${size}px;
+                        left: ${Math.random() * 100}%;
+                        animation-duration: ${Math.random() * 10 + 8}s;
+                        animation-delay: ${Math.random() * 8}s;
+                    `;
+            container.appendChild(p);
+          }
+        }
+      });
+
+      /* ── 2. 헤더 스크롤 효과 ── */
+      window.addEventListener("scroll", () => {
+        const header = document.getElementById("mainHeader");
+        const scrollBtn = document.getElementById("scrollTopBtn");
+        if (window.scrollY > 60) {
+          header.classList.add("header-scrolled");
+          scrollBtn.classList.remove("opacity-0", "pointer-events-none");
+        } else {
+          header.classList.remove("header-scrolled");
+          scrollBtn.classList.add("opacity-0", "pointer-events-none");
+        }
+      });
+
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      /* ── 3. 폼 제출 + API 저장 ── */
+      async function submitForm(event) {
+        event.preventDefault();
+        const name = document.getElementById("inputName").value.trim();
+        const phone = document.getElementById("inputPhone").value.trim();
+        const interest = document.getElementById("inputInterest").value;
+        const btn = document.getElementById("submitBtn");
+        const text = document.getElementById("submitText");
+        const spinner = document.getElementById("submitSpinner");
+
+        if (!name || !phone) return;
+
+        // 로딩 UI
+        btn.disabled = true;
+        text.textContent = "전송 중...";
+        spinner.classList.remove("hidden");
+
+        try {
+          await fetch("tables/consultations", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              phone,
+              interest: interest || "미선택",
+              submitted_at: new Date().toISOString(),
+            }),
+          });
+        } catch (e) {
+          console.warn("DB 저장 오류 (무시):", e);
+        }
+
+        // 버튼 복구
+        btn.disabled = false;
+        text.textContent = "상담 신청 완료하기 🚀";
+        spinner.classList.add("hidden");
+
+        document.getElementById("consultForm").reset();
+        openSuccessModal();
+      }
+
+      /* ── 4. 모달 제어 ── */
+      function openSuccessModal() {
+        const modal = document.getElementById("successModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        requestAnimationFrame(() => {
+          modal.classList.remove("opacity-0");
+          modal.querySelector("div").classList.remove("scale-95");
+        });
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("successModal");
+        modal.classList.add("opacity-0");
+        modal.querySelector("div").classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }, 300);
+      }
+
+      function openComingSoon() {
+        const modal = document.getElementById("comingSoonModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        requestAnimationFrame(() => {
+          modal.classList.remove("opacity-0");
+          modal.querySelector("div").classList.remove("scale-95");
+        });
+      }
+
+      function closeComingSoon() {
+        const modal = document.getElementById("comingSoonModal");
+        modal.classList.add("opacity-0");
+        modal.querySelector("div").classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }, 300);
+      }
+
+      /* ── 5. 배경음악 제어 ── */
+      const bgMusic = document.getElementById("bgMusic");
+      const playIcon = document.getElementById("playIcon");
+      const pauseIcon = document.getElementById("pauseIcon");
+      let isMusicPlaying = false;
+
+      function toggleBgm() {
+        if (isMusicPlaying) {
+          bgMusic.pause();
+          playIcon.classList.remove("hidden");
+          pauseIcon.classList.add("hidden");
+        } else {
+          bgMusic.play().catch((e) => console.log("오디오 재생 실패:", e));
+          playIcon.classList.add("hidden");
+          pauseIcon.classList.remove("hidden");
+        }
+        isMusicPlaying = !isMusicPlaying;
+      }
+
+      // 첫 클릭 시 자동 시작 (Autoplay 정책 대응)
+      document.body.addEventListener(
+        "click",
+        function initAudio() {
+          if (!isMusicPlaying) {
+            bgMusic
+              .play()
+              .then(() => {
+                isMusicPlaying = true;
+                playIcon.classList.add("hidden");
+                pauseIcon.classList.remove("hidden");
+              })
+              .catch(() => {});
+          }
+        },
+        { once: true },
+      );
+
+      /* ── 6. FAQ 아코디언 ── */
+      function toggleFaq(item) {
+        const answer = item.querySelector(".faq-answer");
+        const isOpen = item.classList.contains("open");
+
+        // 모두 닫기
+        document.querySelectorAll(".faq-item").forEach((el) => {
+          el.classList.remove("open");
+          el.querySelector(".faq-answer").classList.remove("open");
+        });
+
+        // 클릭한 항목만 열기 (토글)
+        if (!isOpen) {
+          item.classList.add("open");
+          answer.classList.add("open");
+        }
+      }
+
+      /* ── 7. PayPal 결제 시스템 (송비의 결제 시스템) ── */
+      let selectedPaymentAmount = '1.00';
+
+      function selectAmount(amount, cardId) {
+        selectedPaymentAmount = amount;
+        document.getElementById('selected-amount-display').textContent = `$${amount}`;
+        
+        // 카드 선택 스타일 업데이트
+        document.querySelectorAll('.payment-amount-card').forEach(card => {
+          card.classList.remove('border-neon', 'shadow-[0_0_20px_rgba(0,243,255,0.4)]');
+        });
+        
+        const activeCard = document.getElementById(cardId);
+        if (activeCard) {
+          activeCard.classList.add('border-neon', 'shadow-[0_0_20px_rgba(0,243,255,0.4)]');
+        }
+      }
+
+      function openPaymentModal(name, amount) {
+        const modal = document.getElementById("paymentSuccessModal");
+        const msg = document.getElementById("paymentSuccessMsg");
+        msg.innerHTML = `감사합니다, <strong>${name}</strong>님!<br><strong>$${amount}</strong> 결제 테스트가 성공적으로 완료되었습니다.`;
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        requestAnimationFrame(() => {
+          modal.classList.remove("opacity-0");
+          modal.querySelector("div").classList.remove("scale-95");
+        });
+      }
+
+      function closePaymentModal() {
+        const modal = document.getElementById("paymentSuccessModal");
+        modal.classList.add("opacity-0");
+        modal.querySelector("div").classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }, 300);
+      }
+
+      // DOM 로드 시 초기 활성화 및 PayPal 버튼 렌더링
+      window.addEventListener("DOMContentLoaded", () => {
+        selectAmount('1.00', 'amount-card-1');
+        
+        if (window.paypal) {
+          paypal.Buttons({
+            style: {
+              layout: 'vertical',
+              color:  'gold',
+              shape:  'rect',
+              label:  'paypal'
+            },
+            createOrder: function(data, actions) {
+              return actions.order.create({
+                purchase_units: [{
+                  amount: {
+                    currency_code: 'USD',
+                    value: selectedPaymentAmount
+                  },
+                  description: `송비의 결제 시스템 테스트 후원 ($${selectedPaymentAmount})`
+                }]
+              });
+            },
+            onApprove: function(data, actions) {
+              return actions.order.capture().then(function(details) {
+                const payerName = details.payer.name.given_name || '테스터';
+                openPaymentModal(payerName, selectedPaymentAmount);
+              });
+            },
+            onError: function(err) {
+              console.error("PayPal 에러 발생:", err);
+              alert("결제 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            }
+          }).render('#paypal-button-container');
+        }
+      });
+    </script>
+  </body>
+</html>
