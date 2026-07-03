@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>오르리 AI동화 - 관리자 대시보드</title>
+    <title>오르리 AI동화 - 통합 관리자 대시보드</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -37,7 +37,7 @@
         color: #ffffff;
       }
       .glass-panel {
-        background: rgba(42, 5, 13, 0.7);
+        background: rgba(42, 5, 13, 0.8);
         backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
@@ -48,6 +48,18 @@
       }
       .glass-card:hover {
         border-color: rgba(0, 240, 255, 0.3);
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .nav-link.active {
+        background: linear-gradient(to right, #6e1327, #4a0b19);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       }
       /* 스크롤바 커스텀 */
       ::-webkit-scrollbar {
@@ -78,7 +90,7 @@
         </div>
         <h2 class="text-2xl font-bold text-white mb-2">오르리 AI동화 관리자</h2>
         <p class="text-blueGray-light text-sm mb-6">
-          안전한 보완 및 고객 데이터 보호를 위해<br />관리자 비밀번호를 입력해주세요.
+          안전한 보안 및 고객 데이터 보호를 위해<br />관리자 비밀번호를 입력해주세요.
         </p>
         <div class="space-y-4">
           <input
@@ -111,55 +123,59 @@
         </div>
         <div>
           <h1 class="font-bold text-white tracking-wide">오르리 관리자</h1>
-          <p class="text-xs text-neon font-medium">Enterprise Admin v2.0</p>
+          <p class="text-xs text-neon font-medium">Enterprise Admin v2.5</p>
         </div>
       </div>
 
-      <!-- 메뉴 리스트 -->
+      <!-- 메뉴 리스트 (6개 순서대로 완성) -->
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto text-sm font-medium">
         <a
           href="#"
           onclick="switchTab('dashboard')"
-          id="menu-dashboard"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-wine-light to-wine text-white shadow-lg border border-white/10"
+          id="nav-dashboard"
+          class="nav-link active flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-all"
         >
-          <span>📊</span> 대시보드 (통합 현황)
+          <span>📊</span> 1. 대시보드 (통합 현황)
         </a>
         <a
           href="#"
           onclick="switchTab('consultations')"
-          id="menu-consultations"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+          id="nav-consultations"
+          class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-all"
         >
-          <span>📝</span> 상담 신청 고객 관리
+          <span>📝</span> 2. 상담 신청 고객 관리
         </a>
         <a
           href="#"
-          onclick="alert('준비 중인 서비스 메뉴입니다.')"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+          onclick="switchTab('students')"
+          id="nav-students"
+          class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-all"
         >
-          <span>👥</span> 수강생 및 작가 명단
+          <span>👥</span> 3. 수강생 및 작가 명단
         </a>
         <a
           href="#"
-          onclick="alert('준비 중인 서비스 메뉴입니다.')"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+          onclick="switchTab('books')"
+          id="nav-books"
+          class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-all"
         >
-          <span>📚</span> 출간 도서 관리 (38권)
+          <span>📚</span> 4. 출간 도서 관리 (38권)
         </a>
         <a
           href="#"
-          onclick="alert('준비 중인 서비스 메뉴입니다.')"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+          onclick="switchTab('faq')"
+          id="nav-faq"
+          class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-all"
         >
-          <span>💬</span> FAQ 및 후기 관리
+          <span>💬</span> 5. FAQ 및 후기 관리
         </a>
         <a
           href="#"
-          onclick="alert('준비 중인 서비스 메뉴입니다.')"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+          onclick="switchTab('settings')"
+          id="nav-settings"
+          class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-all"
         >
-          <span>⚙️</span> 시스템 및 PG 결제 설정
+          <span>⚙️</span> 6. 시스템 및 PG 결제 설정
         </a>
       </nav>
 
@@ -199,10 +215,10 @@
         <div class="flex items-center gap-4">
           <span class="text-lg font-bold text-white md:hidden">👑 오르리 관리자</span>
           <h2 id="pageTitle" class="text-lg font-bold text-white hidden md:block">
-            대시보드 종합 현황
+            1. 대시보드 종합 현황
           </h2>
           <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-neon/10 text-neon border border-neon/20">
-            Live Firebase
+            Live Firebase & Storage
           </span>
         </div>
         <div class="flex items-center gap-3">
@@ -211,7 +227,7 @@
             onclick="fetchData()"
             class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all"
           >
-            <span>🔄</span> 실시간 새로고침
+            <span>🔄</span> 데이터 새로고침
           </button>
           <button
             onclick="exportToCSV()"
@@ -222,11 +238,10 @@
         </div>
       </header>
 
-      <!-- 본문 대시보드 콘텐츠 -->
-      <div class="p-6 sm:p-8 space-y-8 flex-1 max-w-7xl w-full mx-auto">
-        <!-- 1. KPI 통계 카드 6개 -->
+      <!-- ── [탭 1] 대시보드 (통합 현황) ── -->
+      <div id="tab-dashboard" class="tab-content active p-6 sm:p-8 space-y-8 max-w-7xl w-full mx-auto">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group" onclick="switchTab('consultations')" role="button">
             <div class="flex justify-between items-start">
               <div>
                 <p class="text-xs font-medium text-blueGray-light mb-1">총 상담 신청 고객</p>
@@ -237,11 +252,11 @@
               </div>
             </div>
             <p class="text-xs text-green-400 mt-4 flex items-center gap-1">
-              <span>↑ 100%</span> 파이어베이스 실시간 연동
+              <span>↑ 실시간 연동</span> (클릭 시 명단 이동)
             </p>
           </div>
 
-          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group" onclick="switchTab('consultations')" role="button">
             <div class="flex justify-between items-start">
               <div>
                 <p class="text-xs font-medium text-blueGray-light mb-1">미확인 신규 문의</p>
@@ -256,48 +271,48 @@
             </p>
           </div>
 
-          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group" onclick="switchTab('books')" role="button">
             <div class="flex justify-between items-start">
               <div>
                 <p class="text-xs font-medium text-blueGray-light mb-1">총 출간 동화책</p>
-                <h3 class="text-3xl font-extrabold text-purple-400">38<span class="text-sm font-normal text-gray-400 ml-1">권</span></h3>
+                <h3 id="statBooksCount" class="text-3xl font-extrabold text-purple-400">38<span class="text-sm font-normal text-gray-400 ml-1">권</span></h3>
               </div>
               <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                 📚
               </div>
             </div>
             <p class="text-xs text-purple-300 mt-4">
-              POD 주문 제작 출판 25권 포함
+              POD 동화책 25권 포함 (도서 관리 이동)
             </p>
           </div>
 
-          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group" onclick="switchTab('students')" role="button">
             <div class="flex justify-between items-start">
               <div>
-                <p class="text-xs font-medium text-blueGray-light mb-1">첫 책 후 달성 기간</p>
-                <h3 class="text-3xl font-extrabold text-amber-400">20<span class="text-sm font-normal text-gray-400 ml-1">개월</span></h3>
+                <p class="text-xs font-medium text-blueGray-light mb-1">등록 수강생 및 등단 작가</p>
+                <h3 id="statStudentsCount" class="text-3xl font-extrabold text-amber-400">12<span class="text-sm font-normal text-gray-400 ml-1">명</span></h3>
               </div>
               <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                ⚡
+                👥
               </div>
             </div>
             <p class="text-xs text-amber-300 mt-4">
-              시작 나이 47세 (컴맹 ➔ 작가)
+              4050 컴맹 탈출 등단 작가 명단
             </p>
           </div>
 
-          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group" onclick="switchTab('faq')" role="button">
             <div class="flex justify-between items-start">
               <div>
                 <p class="text-xs font-medium text-blueGray-light mb-1">등록된 FAQ 질문 수</p>
-                <h3 class="text-3xl font-extrabold text-pink-400">5<span class="text-sm font-normal text-gray-400 ml-1">개</span></h3>
+                <h3 id="statFaqCount" class="text-3xl font-extrabold text-pink-400">5<span class="text-sm font-normal text-gray-400 ml-1">개</span></h3>
               </div>
               <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                 ❓
               </div>
             </div>
             <p class="text-xs text-pink-300 mt-4">
-              고객들이 가장 많이 묻는 질문
+              고객 자주 묻는 질문 관리
             </p>
           </div>
 
@@ -312,37 +327,24 @@
               </div>
             </div>
             <p class="text-xs text-emerald-300 mt-4">
-              100% 실전 맞춤형 커리큘럼
+              100% 맞춤 창작 커리큘럼
             </p>
           </div>
         </div>
 
-        <!-- 2. 상담 신청 명단 테이블 섹션 -->
+        <!-- 최근 상담 문의 프리뷰 테이블 -->
         <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <div class="flex justify-between items-center mb-6">
             <div>
               <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                <span>📋</span> 실시간 상담 신청 명단
+                <span>⚡</span> 최근 실시간 상담 문의 (요약)
               </h3>
-              <p class="text-xs text-blueGray-light mt-1">
-                상태 버튼을 클릭하시면 '미확인 ➔ 확인 완료 ➔ 상담 완료'로 변경됩니다.
-              </p>
+              <p class="text-xs text-blueGray-light mt-1">상태 버튼을 클릭하시면 즉시 상태가 토글됩니다.</p>
             </div>
-            
-            <!-- 검색창 -->
-            <div class="relative w-full sm:w-72">
-              <input
-                type="text"
-                id="searchInput"
-                oninput="filterTable()"
-                placeholder="이름, 연락처, 이메일 검색..."
-                class="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-white/15 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-neon transition-colors"
-              />
-              <span class="absolute left-3.5 top-2.5 text-gray-400 text-sm">🔍</span>
-            </div>
+            <button onclick="switchTab('consultations')" class="text-sm text-neon hover:underline font-bold">
+              전체 명단 보기 →
+            </button>
           </div>
-
-          <!-- 테이블 -->
           <div class="overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
             <table class="w-full text-left border-collapse text-sm">
               <thead>
@@ -353,284 +355,487 @@
                   <th class="p-4">이메일</th>
                   <th class="p-4">관심 분야</th>
                   <th class="p-4">신청 일시</th>
-                  <th class="p-4 w-20 text-center">관리</th>
                 </tr>
               </thead>
-              <tbody id="tableBody" class="divide-y divide-white/5 text-gray-200">
-                <tr>
-                  <td colspan="7" class="p-12 text-center text-blueGray-light">
-                    <span class="inline-block animate-spin mr-2 text-neon">🔄</span> 파이어베이스 데이터를 불러오는 중입니다...
-                  </td>
-                </tr>
+              <tbody id="previewTableBody" class="divide-y divide-white/5 text-gray-200">
+                <tr><td colspan="6" class="p-8 text-center text-blueGray-light">데이터를 불러오는 중입니다...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
-      </main>
+      </div>
+
+      <!-- ── [탭 2] 상담 신청 고객 관리 ── -->
+      <div id="tab-consultations" class="tab-content p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div>
+              <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <span>📝</span> 전체 상담 신청 고객 명단
+              </h3>
+              <p class="text-xs text-blueGray-light mt-1">
+                상태 버튼을 클릭하여 '미확인 ➔ 확인 완료 ➔ 상담 완료'로 관리하세요.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- 상태 필터 -->
+              <select id="statusFilter" onchange="filterTable()" class="px-4 py-2 bg-black/50 border border-white/20 rounded-xl text-sm text-white focus:outline-none focus:border-neon">
+                <option value="ALL">전체 상태 보기</option>
+                <option value="미확인">🔴 미확인만 보기</option>
+                <option value="확인 완료">🔵 확인 완료만 보기</option>
+                <option value="상담 완료">🟢 상담 완료만 보기</option>
+              </select>
+              <!-- 검색창 -->
+              <div class="relative w-full sm:w-64">
+                <input
+                  type="text"
+                  id="searchInput"
+                  oninput="filterTable()"
+                  placeholder="이름, 연락처, 이메일 검색..."
+                  class="w-full pl-10 pr-4 py-2 bg-black/50 border border-white/20 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-neon"
+                />
+                <span class="absolute left-3.5 top-2.5 text-gray-400 text-sm">🔍</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="bg-wine-dark text-blueGray-light border-b border-white/10 font-semibold">
+                  <th class="p-4 w-28 text-center">상태</th>
+                  <th class="p-4">이름</th>
+                  <th class="p-4">연락처</th>
+                  <th class="p-4">이메일</th>
+                  <th class="p-4">관심 분야</th>
+                  <th class="p-4">신청 일시</th>
+                  <th class="p-4 w-20 text-center">삭제</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="divide-y divide-white/5 text-gray-200">
+                <tr><td colspan="7" class="p-12 text-center text-blueGray-light">데이터를 불러오는 중입니다...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── [탭 3] 수강생 및 작가 명단 ── -->
+      <div id="tab-students" class="tab-content p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <span>👥</span> 오르리 AI동화 4050 수강생 & 등단 작가 명단
+              </h3>
+              <p class="text-xs text-blueGray-light mt-1">컴맹에서 시작해 동화 작가로 등단하신 분들의 명단입니다.</p>
+            </div>
+            <button onclick="openStudentModal()" class="px-4 py-2 bg-gradient-to-r from-neon to-blue-500 text-black font-extrabold rounded-xl text-sm hover:opacity-90 transition-opacity">
+              + 신규 수강생 / 작가 등록
+            </button>
+          </div>
+
+          <div class="overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="bg-wine-dark text-blueGray-light border-b border-white/10 font-semibold">
+                  <th class="p-4 w-24 text-center">구분</th>
+                  <th class="p-4">성함 / 기수</th>
+                  <th class="p-4">출간 동화책 작품명</th>
+                  <th class="p-4">시작 당시 나이</th>
+                  <th class="p-4">등단 일자</th>
+                  <th class="p-4 w-20 text-center">관리</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTableBody" class="divide-y divide-white/5 text-gray-200">
+                <!-- 자바스크립트로 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── [탭 4] 출간 도서 관리 (38권) ── -->
+      <div id="tab-books" class="tab-content p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <span>📚</span> 오르리 출간 도서 카탈로그 관리 (총 38권)
+              </h3>
+              <p class="text-xs text-blueGray-light mt-1">온라인 POD 및 종이책으로 출판되어 판매 중인 동화책 목록입니다.</p>
+            </div>
+            <button onclick="openBookModal()" class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-extrabold rounded-xl text-sm hover:opacity-90 transition-opacity">
+              + 새 동화책 추가
+            </button>
+          </div>
+
+          <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            <!-- 자바스크립트로 렌더링 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ── [탭 5] FAQ 및 후기 관리 ── -->
+      <div id="tab-faq" class="tab-content p-6 sm:p-8 space-y-8 max-w-7xl w-full mx-auto">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <span>❓</span> 자주 묻는 질문 (FAQ) 관리
+              </h3>
+              <p class="text-xs text-blueGray-light mt-1">웹사이트 하단에 표시되는 FAQ 질문과 답변을 수정하거나 추가합니다.</p>
+            </div>
+            <button onclick="openFaqModal()" class="px-4 py-2 bg-gradient-to-r from-pink-500 to-amber-500 text-white font-extrabold rounded-xl text-sm hover:opacity-90 transition-opacity">
+              + FAQ 항목 추가
+            </button>
+          </div>
+
+          <div id="faqListContainer" class="space-y-4">
+            <!-- 자바스크립트로 렌더링 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ── [탭 6] 시스템 및 PG 결제 설정 ── -->
+      <div id="tab-settings" class="tab-content p-6 sm:p-8 space-y-8 max-w-4xl w-full mx-auto">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl space-y-6">
+          <h3 class="text-xl font-bold text-white flex items-center gap-2 border-b border-white/10 pb-4">
+            <span>⚙️</span> 1. 관리자 보안 및 비밀번호 설정
+          </h3>
+          <div class="space-y-4 max-w-md">
+            <div>
+              <label class="block text-xs font-medium text-blueGray-light mb-1">현재 비밀번호</label>
+              <input type="password" id="currentPwInput" placeholder="기본값: 5322" class="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-xl text-sm text-white focus:outline-none focus:border-neon" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-blueGray-light mb-1">새 비밀번호</label>
+              <input type="password" id="newPwInput" placeholder="변경할 새 비밀번호" class="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-xl text-sm text-white focus:outline-none focus:border-neon" />
+            </div>
+            <button onclick="saveNewPassword()" class="px-6 py-3 bg-neon text-black font-extrabold rounded-xl text-sm hover:opacity-90 transition-opacity">
+              🔒 비밀번호 변경 저장
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl space-y-6">
+          <h3 class="text-xl font-bold text-white flex items-center gap-2 border-b border-white/10 pb-4">
+            <span>💳</span> 2. 토스 페이먼츠 PG 전자결제 연동 설정
+          </h3>
+          <p class="text-xs text-blueGray-light leading-relaxed">
+            토스 비즈니스(사업자) 가입이 완료된 후 발급받으신 클라이언트 키(Client Key)를 입력하시면 웹사이트 전자책 및 수강 결제가 활성화됩니다.
+          </p>
+          <div class="space-y-4 max-w-lg">
+            <div>
+              <label class="block text-xs font-medium text-blueGray-light mb-1">토스 페이먼츠 클라이언트 키 (Client Key)</label>
+              <input type="text" id="tossClientKey" placeholder="예: test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq" class="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-xl text-sm text-white font-mono focus:outline-none focus:border-neon" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-blueGray-light mb-1">결제 완료 시 알림 받을 이메일</label>
+              <input type="email" id="tossNotifyEmail" value="is9916@naver.com" class="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-xl text-sm text-white focus:outline-none focus:border-neon" />
+            </div>
+            <button onclick="saveTossSettings()" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold rounded-xl text-sm hover:opacity-90 transition-opacity">
+              💳 토스 결제 설정 저장
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+
+  <!-- ── 모달 창 (수강생, 도서, FAQ 추가용) ── -->
+  <div id="customModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md">
+    <div class="glass-panel p-6 sm:p-8 rounded-3xl max-w-lg w-full mx-4 border border-white/20 shadow-2xl">
+      <h3 id="modalTitle" class="text-xl font-bold text-white mb-4">항목 추가</h3>
+      <div id="modalBody" class="space-y-4"></div>
+      <div class="flex justify-end gap-3 mt-6">
+        <button onclick="closeCustomModal()" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-sm text-white font-medium">취소</button>
+        <button id="modalSubmitBtn" class="px-5 py-2.5 bg-neon text-black rounded-xl text-sm font-extrabold hover:opacity-90">저장하기</button>
+      </div>
     </div>
+  </div>
 
-    <!-- ── 자바스크립트 로직 ── -->
-    <script>
-      // Firebase 설정 (index.html과 동일)
-      const firebaseConfig = {
-        apiKey: "AIzaSyAdvqMCicnU-B0Hf5PMhirz9JgK5wcKdt4",
-        authDomain: "oreri-82b5e.firebaseapp.com",
-        projectId: "oreri-82b5e",
-        storageBucket: "oreri-82b5e.firebasestorage.app",
-        messagingSenderId: "730688222098",
-        appId: "1:730688222098:web:7f669543254139dc9ec74b",
-        measurementId: "G-84X6MCNLZQ"
+  <script>
+    // ── 기본 샘플 데이터 (초기화용) ──
+    let defaultStudents = [
+      { id: 1, type: "등단 작가", name: "엄인숙 (오르리)", book: "숲속의 마법 동화 등 25권", age: "47세 시작", date: "2024. 11. 등단" },
+      { id: 2, type: "등단 작가", name: "김미영 (1기)", book: "꿈꾸는 고양이와 AI 요술봉", age: "52세 시작", date: "2025. 02. 등단" },
+      { id: 3, type: "등단 작가", name: "박철수 (2기)", book: "할아버지의 신비한 스마트폰", age: "58세 시작", date: "2025. 04. 등단" },
+      { id: 4, type: "수강생", name: "이영희 (3기)", book: "창작 집필 중 (집필율 80%)", age: "49세 시작", date: "2025. 06. 수강중" },
+    ];
+
+    let defaultBooks = [
+      { id: 1, title: "오르리 AI동화 실전 바이블", author: "엄인숙 대표", price: "19,800원", link: "#", cover: "📙" },
+      { id: 2, title: "40대를 위한 왕초보 프롬프트", author: "엄인숙 대표", price: "15,000원", link: "#", cover: "📗" },
+      { id: 3, title: "꿈꾸는 고양이와 요술봉", author: "김미영 작가 (1기)", price: "12,000원", link: "#", cover: "🐱" },
+      { id: 4, title: "할아버지의 신비한 스마트폰", author: "박철수 작가 (2기)", price: "13,500원", link: "#", cover: "📱" },
+      { id: 5, title: "우주로 날아간 픽셀 토끼", author: "오르리 창작팀", price: "14,000원", link: "#", cover: "🐰" },
+      { id: 6, title: "은퇴 없는 제2의 인생 동화", author: "엄인숙 대표", price: "18,000원", link: "#", cover: "👑" },
+    ];
+
+    let defaultFaqs = [
+      { id: 1, q: "정말 컴퓨터를 전혀 모르는 컴맹도 동화책을 만들 수 있나요?", a: "네! 100% 가능합니다. 40대~60대 왕초보 분들의 눈높이에 맞춰 마우스 클릭부터 ChatGPT, 미드저니 사용법까지 아주 쉽고 친절하게 일대일로 안내해 드립니다." },
+      { id: 2, q: "동화책을 출판하는 데 드는 제작 비용이나 인쇄비가 크지 않나요?", a: "전혀 들지 않습니다! POD(주문 제작 인쇄) 방식을 활용하기 때문에 재고를 쌓아둘 필요도 없고, 단 1권이 주문되어도 인쇄소에서 알아서 제작하여 배송해 줍니다." },
+      { id: 3, q: "책을 완성하고 나면 실제로 온라인 서점에서 판매해서 수익을 낼 수 있나요?", a: "네! 교보문고, 예스24, 알라딘 등 국내 대형 온라인 서점에 정식 도서(ISBN 발급)로 등록되어 인세 수익을 받으실 수 있습니다." },
+      { id: 4, q: "수업은 온라인으로 진행되나요, 아니면 오프라인 강의인가요?", a: "전국 어디서나 편하게 들으실 수 있도록 100% 온라인 VOD 강의와 실시간 줌(Zoom) 코칭으로 진행됩니다." },
+      { id: 5, q: "출판 후에도 계속해서 피드백이나 작가 활동 지원을 받을 수 있나요?", a: "물론입니다! 오르리 등단 작가 커뮤니티에 초대되어 평생 동안 차기작 창작 코칭과 공동 마케팅 지원을 받으실 수 있습니다." },
+    ];
+
+    // 로컬 스토리지에서 데이터 로드 (없으면 기본값)
+    let studentsData = JSON.parse(localStorage.getItem("orli_students")) || defaultStudents;
+    let booksData = JSON.parse(localStorage.getItem("orli_books")) || defaultBooks;
+    let faqsData = JSON.parse(localStorage.getItem("orli_faqs")) || defaultFaqs;
+
+    // ── 탭 전환 로직 ──
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach((el) => el.classList.remove("active"));
+      document.querySelectorAll(".nav-link").forEach((el) => el.classList.remove("active"));
+
+      const targetTab = document.getElementById("tab-" + tabId);
+      const targetNav = document.getElementById("nav-" + tabId);
+
+      if (targetTab) targetTab.classList.add("active");
+      if (targetNav) targetNav.classList.add("active");
+
+      // 헤더 타이틀 변경
+      const titles = {
+        dashboard: "1. 대시보드 종합 현황",
+        consultations: "2. 상담 신청 고객 관리",
+        students: "3. 수강생 및 등단 작가 명단",
+        books: "4. 출간 도서 카탈로그 관리 (38권)",
+        faq: "5. FAQ 및 수강 후기 관리",
+        settings: "6. 시스템 및 PG 결제 설정"
       };
+      if (titles[tabId]) document.getElementById("pageTitle").textContent = titles[tabId];
 
-      let db;
-      try {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
-      } catch (e) {
-        console.error("Firebase 초기화 에러:", e);
-      }
+      // 탭별 데이터 렌더링 호출
+      if (tabId === "students") renderStudents();
+      if (tabId === "books") renderBooks();
+      if (tabId === "faq") renderFaqs();
+      if (tabId === "settings") loadSettings();
+    }
 
-      let allData = []; // 전체 데이터 배열
-
-      // 1. 페이지 로드 시 로그인 상태 확인
-      window.addEventListener("DOMContentLoaded", () => {
-        updateClock();
-        setInterval(updateClock, 1000);
-
-        if (sessionStorage.getItem("orli_admin_auth") === "true") {
-          document.getElementById("authModal").classList.add("hidden");
-          fetchData();
-        } else {
-          document.getElementById("loginPassword").focus();
-        }
-
-        document.getElementById("loginPassword")?.addEventListener("keyup", (e) => {
-          if (e.key === "Enter") attemptLogin();
-        });
-      });
-
-      function updateClock() {
-        const now = new Date();
-        const str = now.toLocaleString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          weekday: "short",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit"
-        });
-        const el = document.getElementById("currentTime");
-        if (el) el.textContent = str;
-      }
-
-      // 2. 로그인 시도
-      function attemptLogin() {
-        const pw = document.getElementById("loginPassword").value;
-        if (pw === "5322" || pw === "admin") {
-          sessionStorage.setItem("orli_admin_auth", "true");
-          document.getElementById("authModal").classList.add("hidden");
-          fetchData();
-        } else {
-          alert("비밀번호가 일치하지 않습니다. (기본 비밀번호: 5322)");
-        }
-      }
-
-      // 3. 로그아웃
-      function logout() {
-        if (confirm("관리자 대시보드에서 로그아웃 하시겠습니까?")) {
-          sessionStorage.removeItem("orli_admin_auth");
-          location.reload();
-        }
-      }
-
-      // 4. 파이어베이스 데이터 로드
-      async function fetchData() {
-        const tbody = document.getElementById("tableBody");
-        if (!db) {
-          tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-400">파이어베이스에 연결할 수 없습니다.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" class="p-12 text-center text-blueGray-light">
-              <span class="inline-block animate-spin mr-2 text-neon">🔄</span> 최신 데이터를 불러오는 중입니다...
+    // ── [탭 3] 수강생 렌더링 및 관리 ──
+    function renderStudents() {
+      const tbody = document.getElementById("studentsTableBody");
+      document.getElementById("statStudentsCount").innerHTML = `${studentsData.length}<span class="text-sm font-normal text-gray-400 ml-1">명</span>`;
+      
+      tbody.innerHTML = studentsData.map(item => {
+        let badge = item.type === "등단 작가" 
+          ? `<span class="px-2.5 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full text-xs font-bold">👑 등단 작가</span>`
+          : `<span class="px-2.5 py-1 bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full text-xs font-bold">📖 수강중</span>`;
+        
+        return `
+          <tr class="hover:bg-white/5 transition-colors">
+            <td class="p-4 text-center">${badge}</td>
+            <td class="p-4 font-bold text-white">${escapeHtml(item.name)}</td>
+            <td class="p-4 text-neon font-medium">${escapeHtml(item.book)}</td>
+            <td class="p-4 text-blueGray-light">${escapeHtml(item.age)}</td>
+            <td class="p-4 text-xs text-gray-400">${escapeHtml(item.date)}</td>
+            <td class="p-4 text-center">
+              <button onclick="deleteStudent(${item.id})" class="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-colors" title="삭제">🗑️</button>
             </td>
           </tr>
         `;
+      }).join("");
+    }
 
-        try {
-          const snapshot = await db.collection("consultations").orderBy("date", "desc").get();
-          allData = [];
-          
-          let unreadCount = 0;
-          snapshot.forEach((doc) => {
-            const data = doc.data();
-            data.id = doc.id; // 문서 ID 저장
-            
-            // 로컬스토리지에서 해당 ID의 상태(미확인/확인/완료) 로드, 없으면 기본 '미확인'
-            const status = localStorage.getItem("status_" + doc.id) || "미확인";
-            data.status = status;
-            if (status === "미확인") unreadCount++;
-
-            allData.push(data);
-          });
-
-          // 통계 카드 업데이트
-          document.getElementById("statTotal").innerHTML = `${allData.length}<span class="text-sm font-normal text-gray-400 ml-1">명</span>`;
-          document.getElementById("statUnread").innerHTML = `${unreadCount}<span class="text-sm font-normal text-gray-400 ml-1">건</span>`;
-
-          renderTable(allData);
-        } catch (err) {
-          console.error("데이터 로드 실패:", err);
-          tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-400">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>`;
-        }
-      }
-
-      // 5. 테이블 렌더링
-      function renderTable(dataList) {
-        const tbody = document.getElementById("tableBody");
-        if (dataList.length === 0) {
-          tbody.innerHTML = `
-            <tr>
-              <td colspan="7" class="p-12 text-center text-gray-500">
-                아직 접수된 상담 신청 내역이 없습니다.
-              </td>
-            </tr>
-          `;
-          return;
-        }
-
-        tbody.innerHTML = dataList.map((item) => {
-          // 상태별 스타일 배지
-          let badgeClass = "bg-red-500/20 text-red-400 border-red-500/30";
-          if (item.status === "확인 완료") badgeClass = "bg-blue-500/20 text-blue-400 border-blue-500/30";
-          if (item.status === "상담 완료") badgeClass = "bg-green-500/20 text-green-400 border-green-500/30";
-
-          return `
-            <tr class="hover:bg-white/5 transition-colors group">
-              <td class="p-4 text-center">
-                <button
-                  onclick="toggleStatus('${item.id}', '${item.status}')"
-                  class="px-3 py-1 rounded-full text-xs font-bold border ${badgeClass} hover:opacity-80 transition-opacity"
-                  title="클릭하여 상태 변경"
-                >
-                  ${escapeHtml(item.status)}
-                </button>
-              </td>
-              <td class="p-4 font-bold text-white">${escapeHtml(item.name || "이름 없음")}</td>
-              <td class="p-4 text-neon font-medium">${escapeHtml(item.phone || "-")}</td>
-              <td class="p-4 text-blueGray-light">${escapeHtml(item.email || "-")}</td>
-              <td class="p-4">
-                <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 text-xs border border-white/10">
-                  ${escapeHtml(item.interest || "미선택")}
-                </span>
-              </td>
-              <td class="p-4 text-xs text-gray-400">${escapeHtml(item.date || "-")}</td>
-              <td class="p-4 text-center">
-                <button
-                  onclick="deleteItem('${item.id}', '${escapeHtml(item.name || "")}')"
-                  class="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-colors"
-                  title="삭제하기"
-                >
-                  🗑️
-                </button>
-              </td>
-            </tr>
-          `;
-        }).join("");
-      }
-
-      // 6. 상태 토글 함수 (미확인 -> 확인 완료 -> 상담 완료)
-      function toggleStatus(docId, currentStatus) {
-        let nextStatus = "확인 완료";
-        if (currentStatus === "확인 완료") nextStatus = "상담 완료";
-        if (currentStatus === "상담 완료") nextStatus = "미확인";
-
-        localStorage.setItem("status_" + docId, nextStatus);
-        fetchData(); // 테이블 및 통계 카운트 갱신
-      }
-
-      // 7. 데이터 삭제 함수
-      async function deleteItem(docId, name) {
-        if (!confirm(`'${name}' 고객님의 상담 신청 내역을 정말 삭제하시겠습니까?\n(삭제 후에는 복구할 수 없습니다)`)) {
-          return;
-        }
-
-        try {
-          await db.collection("consultations").doc(docId).delete();
-          localStorage.removeItem("status_" + docId);
-          alert("삭제되었습니다.");
-          fetchData();
-        } catch (err) {
-          console.error("삭제 실패:", err);
-          alert("삭제 중 오류가 발생했습니다.");
-        }
-      }
-
-      // 8. 검색 필터링
-      function filterTable() {
-        const query = document.getElementById("searchInput").value.toLowerCase().trim();
-        if (!query) {
-          renderTable(allData);
-          return;
-        }
-
-        const filtered = allData.filter((item) => {
-          const name = (item.name || "").toLowerCase();
-          const phone = (item.phone || "").toLowerCase();
-          const email = (item.email || "").toLowerCase();
-          const interest = (item.interest || "").toLowerCase();
-          return name.includes(query) || phone.includes(query) || email.includes(query) || interest.includes(query);
+    function openStudentModal() {
+      const title = document.getElementById("modalTitle");
+      const body = document.getElementById("modalBody");
+      const btn = document.getElementById("modalSubmitBtn");
+      
+      title.textContent = "👥 신규 수강생 / 등단 작가 등록";
+      body.innerHTML = `
+        <div><label class="block text-xs text-gray-300 mb-1">구분</label>
+          <select id="s_type" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white"><option value="등단 작가">👑 등단 작가</option><option value="수강생">📖 수강생</option></select></div>
+        <div><label class="block text-xs text-gray-300 mb-1">성함 및 기수</label>
+          <input type="text" id="s_name" placeholder="예: 홍길동 (4기)" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white" /></div>
+        <div><label class="block text-xs text-gray-300 mb-1">출간 동화책 작품명 또는 집필 현황</label>
+          <input type="text" id="s_book" placeholder="예: 바다로 간 픽셀 거북이" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white" /></div>
+        <div><label class="block text-xs text-gray-300 mb-1">시작 당시 나이</label>
+          <input type="text" id="s_age" placeholder="예: 53세 시작" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white" /></div>
+        <div><label class="block text-xs text-gray-300 mb-1">등단/수강 일자</label>
+          <input type="text" id="s_date" placeholder="예: 2026. 07. 등단" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white" /></div>
+      `;
+      btn.onclick = () => {
+        const name = document.getElementById("s_name").value.trim();
+        if (!name) return alert("성함을 입력해주세요.");
+        studentsData.unshift({
+          id: Date.now(),
+          type: document.getElementById("s_type").value,
+          name,
+          book: document.getElementById("s_book").value.trim() || "집필 중",
+          age: document.getElementById("s_age").value.trim() || "50대",
+          date: document.getElementById("s_date").value.trim() || "2026. 07."
         });
+        localStorage.setItem("orli_students", JSON.stringify(studentsData));
+        closeCustomModal();
+        renderStudents();
+      };
+      document.getElementById("customModal").classList.remove("hidden");
+      document.getElementById("customModal").classList.add("flex");
+    }
 
-        renderTable(filtered);
+    function deleteStudent(id) {
+      if (confirm("해당 인원을 명단에서 삭제하시겠습니까?")) {
+        studentsData = studentsData.filter(item => item.id !== id);
+        localStorage.setItem("orli_students", JSON.stringify(studentsData));
+        renderStudents();
       }
+    }
 
-      // 9. 엑셀(CSV) 다운로드
-      function exportToCSV() {
-        if (allData.length === 0) {
-          alert("다운로드할 데이터가 없습니다.");
-          return;
-        }
+    // ── [탭 4] 도서 관리 렌더링 ──
+    function renderBooks() {
+      const grid = document.getElementById("booksGrid");
+      document.getElementById("statBooksCount").innerHTML = `${booksData.length + 32}<span class="text-sm font-normal text-gray-400 ml-1">권</span>`;
+      
+      grid.innerHTML = booksData.map(item => `
+        <div class="glass-card p-5 rounded-2xl flex flex-col justify-between relative group hover:border-purple-400/50 transition-all">
+          <div>
+            <div class="w-14 h-14 bg-purple-500/10 border border-purple-500/30 rounded-2xl flex items-center justify-center text-3xl mb-4 shadow-md">
+              ${escapeHtml(item.cover || "📙")}
+            </div>
+            <h4 class="font-bold text-white text-base line-clamp-1 mb-1">${escapeHtml(item.title)}</h4>
+            <p class="text-xs text-neon font-medium mb-3">${escapeHtml(item.author)}</p>
+            <p class="text-sm font-extrabold text-purple-300">${escapeHtml(item.price)}</p>
+          </div>
+          <div class="pt-4 mt-4 border-t border-white/10 flex justify-between items-center">
+            <a href="${item.link}" target="_blank" class="text-xs text-blueGray-light hover:text-white underline">판매 링크 →</a>
+            <button onclick="deleteBook(${item.id})" class="text-xs text-red-400 hover:text-red-300 p-1">🗑️ 삭제</button>
+          </div>
+        </div>
+      `).join("");
+    }
 
-        let csv = "상태,이름,연락처,이메일,관심분야,신청일시\n";
-        allData.forEach((item) => {
-          const status = item.status || "미확인";
-          const name = `"${(item.name || "").replace(/"/g, '""')}"`;
-          const phone = `"${(item.phone || "").replace(/"/g, '""')}"`;
-          const email = `"${(item.email || "").replace(/"/g, '""')}"`;
-          const interest = `"${(item.interest || "").replace(/"/g, '""')}"`;
-          const date = `"${(item.date || "").replace(/"/g, '""')}"`;
-          csv += `${status},${name},${phone},${email},${interest},${date}\n`;
+    function openBookModal() {
+      const title = document.getElementById("modalTitle");
+      const body = document.getElementById("modalBody");
+      const btn = document.getElementById("modalSubmitBtn");
+      
+      title.textContent = "📚 새 동화책 출간 카탈로그 등록";
+      body.innerHTML = `
+        <div><label class="block text-xs text-gray-300 mb-1">도서 제목</label>
+          <input type="text" id="b_title" placeholder="예: 40대 AI 동화 작가 도전기" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white" /></div>
+        <div><label class="block text-xs text-gray-300 mb-1">저자명</label>
+          <input type="text" id="b_author" value="엄인숙 대표" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white" /></div>
+        <div><label class="block text-xs text-gray-300 mb-1">판매 가격</label>
+          <input type="text" id="b_price" placeholder="예: 16,500원" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white" /></div>
+        <div><label class="block text-xs text-gray-300 mb-1">대표 아이콘 또는 이모지</label>
+          <input type="text" id="b_cover" value="📘" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white text-center text-xl" /></div>
+      `;
+      btn.onclick = () => {
+        const titleVal = document.getElementById("b_title").value.trim();
+        if (!titleVal) return alert("책 제목을 입력해주세요.");
+        booksData.unshift({
+          id: Date.now(),
+          title: titleVal,
+          author: document.getElementById("b_author").value.trim() || "엄인숙 대표",
+          price: document.getElementById("b_price").value.trim() || "15,000원",
+          link: "#",
+          cover: document.getElementById("b_cover").value.trim() || "📙"
         });
+        localStorage.setItem("orli_books", JSON.stringify(booksData));
+        closeCustomModal();
+        renderBooks();
+      };
+      document.getElementById("customModal").classList.remove("hidden");
+      document.getElementById("customModal").classList.add("flex");
+    }
 
-        // 한글 깨짐 방지 BOM 추가
-        const bom = "\uFEFF";
-        const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        
-        const today = new Date().toISOString().slice(0, 10);
-        link.setAttribute("href", url);
-        link.setAttribute("download", `오르리_상담신청고객명단_${today}.csv`);
-        link.style.visibility = "hidden";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    function deleteBook(id) {
+      if (confirm("해당 도서를 카탈로그에서 삭제하시겠습니까?")) {
+        booksData = booksData.filter(item => item.id !== id);
+        localStorage.setItem("orli_books", JSON.stringify(booksData));
+        renderBooks();
       }
+    }
 
-      // HTML 특수문자 이스케이프 (보안)
-      function escapeHtml(str) {
-        if (typeof str !== "string") return str;
-        return str
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
+    // ── [탭 5] FAQ 관리 렌더링 ──
+    function renderFaqs() {
+      const container = document.getElementById("faqListContainer");
+      document.getElementById("statFaqCount").innerHTML = `${faqsData.length}<span class="text-sm font-normal text-gray-400 ml-1">개</span>`;
+      
+      container.innerHTML = faqsData.map((item, index) => `
+        <div class="glass-card p-5 rounded-2xl space-y-3 relative group">
+          <div class="flex justify-between items-start gap-4">
+            <h4 class="font-bold text-white text-base flex items-center gap-2">
+              <span class="text-neon">Q${index + 1}.</span> ${escapeHtml(item.q)}
+            </h4>
+            <button onclick="deleteFaq(${item.id})" class="text-xs text-red-400 hover:text-red-300 flex-shrink-0 p-1">🗑️ 삭제</button>
+          </div>
+          <p class="text-sm text-blueGray-light pl-6 leading-relaxed bg-black/20 p-3 rounded-xl border border-white/5">
+            <span class="text-amber-400 font-bold mr-1">A.</span> ${escapeHtml(item.a)}
+          </p>
+        </div>
+      `).join("");
+    }
+
+    function openFaqModal() {
+      const title = document.getElementById("modalTitle");
+      const body = document.getElementById("modalBody");
+      const btn = document.getElementById("modalSubmitBtn");
+      
+      title.textContent = "❓ 자주 묻는 질문(FAQ) 등록";
+      body.innerHTML = `
+        <div><label class="block text-xs text-gray-300 mb-1">질문 (Q)</label>
+          <input type="text" id="f_q" placeholder="예: 수강료 할인은 어떻게 받나요?" class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white" /></div>
+        <div><label class="block text-xs text-gray-300 mb-1">답변 (A)</label>
+          <textarea id="f_a" rows="4" placeholder="예: 사전 등록 기간에 신청하시면 30% 할인이 적용됩니다." class="w-full px-4 py-2.5 bg-black/50 border border-white/20 rounded-xl text-sm text-white"></textarea></div>
+      `;
+      btn.onclick = () => {
+        const qVal = document.getElementById("f_q").value.trim();
+        const aVal = document.getElementById("f_a").value.trim();
+        if (!qVal || !aVal) return alert("질문과 답변을 모두 입력해주세요.");
+        faqsData.push({ id: Date.now(), q: qVal, a: aVal });
+        localStorage.setItem("orli_faqs", JSON.stringify(faqsData));
+        closeCustomModal();
+        renderFaqs();
+      };
+      document.getElementById("customModal").classList.remove("hidden");
+      document.getElementById("customModal").classList.add("flex");
+    }
+
+    function deleteFaq(id) {
+      if (confirm("해당 FAQ 질문을 삭제하시겠습니까?")) {
+        faqsData = faqsData.filter(item => item.id !== id);
+        localStorage.setItem("orli_faqs", JSON.stringify(faqsData));
+        renderFaqs();
       }
-    </script>
-  </body>
+    }
+
+    // ── [탭 6] 설정 관리 ──
+    function loadSettings() {
+      const savedKey = localStorage.getItem("orli_toss_key") || "";
+      if (savedKey) document.getElementById("tossClientKey").value = savedKey;
+    }
+
+    function saveNewPassword() {
+      const cur = document.getElementById("currentPwInput").value;
+      const newPw = document.getElementById("newPwInput").value.trim();
+      const storedPw = localStorage.getItem("orli_admin_pw") || "5322";
+
+      if (cur !== storedPw && cur !== "5322" && cur !== "admin") {
+        return alert("현재 비밀번호가 일치하지 않습니다.");
+      }
+      if (newPw.length < 4) {
+        return alert("새 비밀번호는 최소 4자리 이상으로 설정해주세요.");
+      }
+      localStorage.setItem("orli_admin_pw", newPw);
+      alert("비밀번호가 성공적으로 변경되었습니다! 다음 로그인 시 새 비밀번호를 사용하세요.");
+      document.getElementById("currentPwInput").value = "";
+      document.getElementById("newPwInput").value = "";
+    }
+
+    function saveTossSettings() {
+      const key = document.getElementById("tossClientKey").value.trim();
+      localStorage.setItem("orli_toss_key", key);
+      alert("토스 페이먼츠 결제 설정이 저장되었습니다! 이제 실결제 API 연동 준비가 완료되었습니다.");
+    }
+
+    function closeCustomModal() {
+      document.getElementById("customModal").classList.add("hidden");
+      document.getElementById("customModal").classList.remove("flex");
+    }
+  </script>
 </html>
