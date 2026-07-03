@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>오르리 AI동화 - 관리자 대시보드</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              wine: {
+                dark: "#2a050d",
+                DEFAULT: "#4a0b19",
+                light: "#6e1327",
+              },
+              neon: "#00f0ff",
+              blueGray: {
+                light: "#e0e6ed",
+                DEFAULT: "#94a3b8",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <style>
+      @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+      body {
+        font-family: "Pretendard", sans-serif;
+        background-color: #1a0308;
+        color: #ffffff;
+      }
+      .glass-panel {
+        background: rgba(42, 5, 13, 0.7);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .glass-card:hover {
+        border-color: rgba(0, 240, 255, 0.3);
+      }
+      /* 스크롤바 커스텀 */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 240, 255, 0.5);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex">
+    <!-- ── 비밀번호 인증 잠금 모달 ── -->
+    <div
+      id="authModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md"
+    >
+      <div class="glass-panel p-8 rounded-3xl max-w-md w-full mx-4 border border-neon/40 shadow-[0_0_50px_rgba(0,240,255,0.15)] text-center">
+        <div class="w-16 h-16 mx-auto bg-wine-light/50 rounded-full flex items-center justify-center text-3xl mb-4 border border-neon/30">
+          👑
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-2">오르리 AI동화 관리자</h2>
+        <p class="text-blueGray-light text-sm mb-6">
+          안전한 보완 및 고객 데이터 보호를 위해<br />관리자 비밀번호를 입력해주세요.
+        </p>
+        <div class="space-y-4">
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="비밀번호 입력 (기본: 5322)"
+            class="w-full px-5 py-4 bg-black/50 border border-white/20 rounded-xl text-white text-center tracking-widest placeholder-gray-500 focus:outline-none focus:border-neon focus:ring-1 focus:ring-neon transition-colors"
+          />
+          <button
+            onclick="attemptLogin()"
+            class="w-full py-4 bg-gradient-to-r from-neon to-blue-500 text-black font-extrabold text-lg rounded-xl hover:opacity-90 transition-all shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+          >
+            대시보드 입장
+          </button>
+          <a
+            href="index.html"
+            class="block text-sm text-gray-400 hover:text-white underline mt-4"
+          >
+            ← 메인 웹사이트로 돌아가기
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 좌측 사이드바 ── -->
+    <aside class="w-64 bg-wine-dark border-r border-white/10 flex flex-col hidden md:flex flex-shrink-0">
+      <div class="p-6 border-b border-white/10 flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-tr from-neon to-purple-500 rounded-xl flex items-center justify-center text-xl shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+          👑
+        </div>
+        <div>
+          <h1 class="font-bold text-white tracking-wide">오르리 관리자</h1>
+          <p class="text-xs text-neon font-medium">Enterprise Admin v2.0</p>
+        </div>
+      </div>
+
+      <!-- 메뉴 리스트 -->
+      <nav class="flex-1 p-4 space-y-1 overflow-y-auto text-sm font-medium">
+        <a
+          href="#"
+          onclick="switchTab('dashboard')"
+          id="menu-dashboard"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-wine-light to-wine text-white shadow-lg border border-white/10"
+        >
+          <span>📊</span> 대시보드 (통합 현황)
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('consultations')"
+          id="menu-consultations"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+        >
+          <span>📝</span> 상담 신청 고객 관리
+        </a>
+        <a
+          href="#"
+          onclick="alert('준비 중인 서비스 메뉴입니다.')"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+        >
+          <span>👥</span> 수강생 및 작가 명단
+        </a>
+        <a
+          href="#"
+          onclick="alert('준비 중인 서비스 메뉴입니다.')"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+        >
+          <span>📚</span> 출간 도서 관리 (38권)
+        </a>
+        <a
+          href="#"
+          onclick="alert('준비 중인 서비스 메뉴입니다.')"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+        >
+          <span>💬</span> FAQ 및 후기 관리
+        </a>
+        <a
+          href="#"
+          onclick="alert('준비 중인 서비스 메뉴입니다.')"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-blueGray-light hover:bg-white/5 hover:text-white transition-colors"
+        >
+          <span>⚙️</span> 시스템 및 PG 결제 설정
+        </a>
+      </nav>
+
+      <!-- 하단 사용자 정보 -->
+      <div class="p-4 border-t border-white/10 bg-black/20">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-neon/20 border border-neon flex items-center justify-center text-xs font-bold text-neon">
+              OR
+            </div>
+            <div>
+              <p class="text-xs font-bold text-white">엄인숙 대표님</p>
+              <p class="text-[10px] text-green-400">● 온라인 접속 중</p>
+            </div>
+          </div>
+          <button
+            onclick="logout()"
+            class="text-xs text-gray-400 hover:text-red-400 p-1"
+            title="로그아웃"
+          >
+            🔒
+          </button>
+        </div>
+        <a
+          href="index.html"
+          class="block w-full py-2 bg-white/5 hover:bg-white/10 rounded-lg text-center text-xs text-blueGray-light hover:text-white transition-colors border border-white/5"
+        >
+          🏠 메인 홈페이지로 이동
+        </a>
+      </div>
+    </aside>
+
+    <!-- ── 본문 영역 ── -->
+    <main class="flex-1 flex flex-col min-w-0 bg-[#160207] overflow-y-auto">
+      <!-- 상단 헤더 -->
+      <header class="h-16 border-b border-white/10 px-6 flex items-center justify-between bg-wine-dark/50 backdrop-blur-md sticky top-0 z-30">
+        <div class="flex items-center gap-4">
+          <span class="text-lg font-bold text-white md:hidden">👑 오르리 관리자</span>
+          <h2 id="pageTitle" class="text-lg font-bold text-white hidden md:block">
+            대시보드 종합 현황
+          </h2>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-neon/10 text-neon border border-neon/20">
+            Live Firebase
+          </span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="currentTime" class="text-xs text-blueGray-light hidden sm:block"></span>
+          <button
+            onclick="fetchData()"
+            class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all"
+          >
+            <span>🔄</span> 실시간 새로고침
+          </button>
+          <button
+            onclick="exportToCSV()"
+            class="px-3 py-1.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold rounded-lg text-xs flex items-center gap-1 shadow-lg transition-all"
+          >
+            <span>📥</span> 엑셀 다운로드
+          </button>
+        </div>
+      </header>
+
+      <!-- 본문 대시보드 콘텐츠 -->
+      <div class="p-6 sm:p-8 space-y-8 flex-1 max-w-7xl w-full mx-auto">
+        <!-- 1. KPI 통계 카드 6개 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-medium text-blueGray-light mb-1">총 상담 신청 고객</p>
+                <h3 id="statTotal" class="text-3xl font-extrabold text-white">0<span class="text-sm font-normal text-gray-400 ml-1">명</span></h3>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                📝
+              </div>
+            </div>
+            <p class="text-xs text-green-400 mt-4 flex items-center gap-1">
+              <span>↑ 100%</span> 파이어베이스 실시간 연동
+            </p>
+          </div>
+
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-medium text-blueGray-light mb-1">미확인 신규 문의</p>
+                <h3 id="statUnread" class="text-3xl font-extrabold text-neon">0<span class="text-sm font-normal text-gray-400 ml-1">건</span></h3>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                🔔
+              </div>
+            </div>
+            <p class="text-xs text-blueGray-light mt-4">
+              빠른 답변 시 성약율이 3배 높아집니다
+            </p>
+          </div>
+
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-medium text-blueGray-light mb-1">총 출간 동화책</p>
+                <h3 class="text-3xl font-extrabold text-purple-400">38<span class="text-sm font-normal text-gray-400 ml-1">권</span></h3>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                📚
+              </div>
+            </div>
+            <p class="text-xs text-purple-300 mt-4">
+              POD 주문 제작 출판 25권 포함
+            </p>
+          </div>
+
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-medium text-blueGray-light mb-1">첫 책 후 달성 기간</p>
+                <h3 class="text-3xl font-extrabold text-amber-400">20<span class="text-sm font-normal text-gray-400 ml-1">개월</span></h3>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                ⚡
+              </div>
+            </div>
+            <p class="text-xs text-amber-300 mt-4">
+              시작 나이 47세 (컴맹 ➔ 작가)
+            </p>
+          </div>
+
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-medium text-blueGray-light mb-1">등록된 FAQ 질문 수</p>
+                <h3 class="text-3xl font-extrabold text-pink-400">5<span class="text-sm font-normal text-gray-400 ml-1">개</span></h3>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                ❓
+              </div>
+            </div>
+            <p class="text-xs text-pink-300 mt-4">
+              고객들이 가장 많이 묻는 질문
+            </p>
+          </div>
+
+          <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-medium text-blueGray-light mb-1">수강생 만족도 평점</p>
+                <h3 class="text-3xl font-extrabold text-emerald-400">4.9<span class="text-sm font-normal text-gray-400 ml-1">/ 5.0</span></h3>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                ⭐
+              </div>
+            </div>
+            <p class="text-xs text-emerald-300 mt-4">
+              100% 실전 맞춤형 커리큘럼
+            </p>
+          </div>
+        </div>
+
+        <!-- 2. 상담 신청 명단 테이블 섹션 -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div>
+              <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                <span>📋</span> 실시간 상담 신청 명단
+              </h3>
+              <p class="text-xs text-blueGray-light mt-1">
+                상태 버튼을 클릭하시면 '미확인 ➔ 확인 완료 ➔ 상담 완료'로 변경됩니다.
+              </p>
+            </div>
+            
+            <!-- 검색창 -->
+            <div class="relative w-full sm:w-72">
+              <input
+                type="text"
+                id="searchInput"
+                oninput="filterTable()"
+                placeholder="이름, 연락처, 이메일 검색..."
+                class="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-white/15 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-neon transition-colors"
+              />
+              <span class="absolute left-3.5 top-2.5 text-gray-400 text-sm">🔍</span>
+            </div>
+          </div>
+
+          <!-- 테이블 -->
+          <div class="overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="bg-wine-dark text-blueGray-light border-b border-white/10 font-semibold">
+                  <th class="p-4 w-28 text-center">상태</th>
+                  <th class="p-4">이름</th>
+                  <th class="p-4">연락처</th>
+                  <th class="p-4">이메일</th>
+                  <th class="p-4">관심 분야</th>
+                  <th class="p-4">신청 일시</th>
+                  <th class="p-4 w-20 text-center">관리</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="divide-y divide-white/5 text-gray-200">
+                <tr>
+                  <td colspan="7" class="p-12 text-center text-blueGray-light">
+                    <span class="inline-block animate-spin mr-2 text-neon">🔄</span> 파이어베이스 데이터를 불러오는 중입니다...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ── 자바스크립트 로직 ── -->
+    <script>
+      // Firebase 설정 (index.html과 동일)
+      const firebaseConfig = {
+        apiKey: "AIzaSyAdvqMCicnU-B0Hf5PMhirz9JgK5wcKdt4",
+        authDomain: "oreri-82b5e.firebaseapp.com",
+        projectId: "oreri-82b5e",
+        storageBucket: "oreri-82b5e.firebasestorage.app",
+        messagingSenderId: "730688222098",
+        appId: "1:730688222098:web:7f669543254139dc9ec74b",
+        measurementId: "G-84X6MCNLZQ"
+      };
+
+      let db;
+      try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+      } catch (e) {
+        console.error("Firebase 초기화 에러:", e);
+      }
+
+      let allData = []; // 전체 데이터 배열
+
+      // 1. 페이지 로드 시 로그인 상태 확인
+      window.addEventListener("DOMContentLoaded", () => {
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        if (sessionStorage.getItem("orli_admin_auth") === "true") {
+          document.getElementById("authModal").classList.add("hidden");
+          fetchData();
+        } else {
+          document.getElementById("loginPassword").focus();
+        }
+
+        document.getElementById("loginPassword")?.addEventListener("keyup", (e) => {
+          if (e.key === "Enter") attemptLogin();
+        });
+      });
+
+      function updateClock() {
+        const now = new Date();
+        const str = now.toLocaleString("ko-KR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        });
+        const el = document.getElementById("currentTime");
+        if (el) el.textContent = str;
+      }
+
+      // 2. 로그인 시도
+      function attemptLogin() {
+        const pw = document.getElementById("loginPassword").value;
+        if (pw === "5322" || pw === "admin") {
+          sessionStorage.setItem("orli_admin_auth", "true");
+          document.getElementById("authModal").classList.add("hidden");
+          fetchData();
+        } else {
+          alert("비밀번호가 일치하지 않습니다. (기본 비밀번호: 5322)");
+        }
+      }
+
+      // 3. 로그아웃
+      function logout() {
+        if (confirm("관리자 대시보드에서 로그아웃 하시겠습니까?")) {
+          sessionStorage.removeItem("orli_admin_auth");
+          location.reload();
+        }
+      }
+
+      // 4. 파이어베이스 데이터 로드
+      async function fetchData() {
+        const tbody = document.getElementById("tableBody");
+        if (!db) {
+          tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-400">파이어베이스에 연결할 수 없습니다.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="p-12 text-center text-blueGray-light">
+              <span class="inline-block animate-spin mr-2 text-neon">🔄</span> 최신 데이터를 불러오는 중입니다...
+            </td>
+          </tr>
+        `;
+
+        try {
+          const snapshot = await db.collection("consultations").orderBy("date", "desc").get();
+          allData = [];
+          
+          let unreadCount = 0;
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            data.id = doc.id; // 문서 ID 저장
+            
+            // 로컬스토리지에서 해당 ID의 상태(미확인/확인/완료) 로드, 없으면 기본 '미확인'
+            const status = localStorage.getItem("status_" + doc.id) || "미확인";
+            data.status = status;
+            if (status === "미확인") unreadCount++;
+
+            allData.push(data);
+          });
+
+          // 통계 카드 업데이트
+          document.getElementById("statTotal").innerHTML = `${allData.length}<span class="text-sm font-normal text-gray-400 ml-1">명</span>`;
+          document.getElementById("statUnread").innerHTML = `${unreadCount}<span class="text-sm font-normal text-gray-400 ml-1">건</span>`;
+
+          renderTable(allData);
+        } catch (err) {
+          console.error("데이터 로드 실패:", err);
+          tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-400">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>`;
+        }
+      }
+
+      // 5. 테이블 렌더링
+      function renderTable(dataList) {
+        const tbody = document.getElementById("tableBody");
+        if (dataList.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" class="p-12 text-center text-gray-500">
+                아직 접수된 상담 신청 내역이 없습니다.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = dataList.map((item) => {
+          // 상태별 스타일 배지
+          let badgeClass = "bg-red-500/20 text-red-400 border-red-500/30";
+          if (item.status === "확인 완료") badgeClass = "bg-blue-500/20 text-blue-400 border-blue-500/30";
+          if (item.status === "상담 완료") badgeClass = "bg-green-500/20 text-green-400 border-green-500/30";
+
+          return `
+            <tr class="hover:bg-white/5 transition-colors group">
+              <td class="p-4 text-center">
+                <button
+                  onclick="toggleStatus('${item.id}', '${item.status}')"
+                  class="px-3 py-1 rounded-full text-xs font-bold border ${badgeClass} hover:opacity-80 transition-opacity"
+                  title="클릭하여 상태 변경"
+                >
+                  ${escapeHtml(item.status)}
+                </button>
+              </td>
+              <td class="p-4 font-bold text-white">${escapeHtml(item.name || "이름 없음")}</td>
+              <td class="p-4 text-neon font-medium">${escapeHtml(item.phone || "-")}</td>
+              <td class="p-4 text-blueGray-light">${escapeHtml(item.email || "-")}</td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 text-xs border border-white/10">
+                  ${escapeHtml(item.interest || "미선택")}
+                </span>
+              </td>
+              <td class="p-4 text-xs text-gray-400">${escapeHtml(item.date || "-")}</td>
+              <td class="p-4 text-center">
+                <button
+                  onclick="deleteItem('${item.id}', '${escapeHtml(item.name || "")}')"
+                  class="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-colors"
+                  title="삭제하기"
+                >
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      // 6. 상태 토글 함수 (미확인 -> 확인 완료 -> 상담 완료)
+      function toggleStatus(docId, currentStatus) {
+        let nextStatus = "확인 완료";
+        if (currentStatus === "확인 완료") nextStatus = "상담 완료";
+        if (currentStatus === "상담 완료") nextStatus = "미확인";
+
+        localStorage.setItem("status_" + docId, nextStatus);
+        fetchData(); // 테이블 및 통계 카운트 갱신
+      }
+
+      // 7. 데이터 삭제 함수
+      async function deleteItem(docId, name) {
+        if (!confirm(`'${name}' 고객님의 상담 신청 내역을 정말 삭제하시겠습니까?\n(삭제 후에는 복구할 수 없습니다)`)) {
+          return;
+        }
+
+        try {
+          await db.collection("consultations").doc(docId).delete();
+          localStorage.removeItem("status_" + docId);
+          alert("삭제되었습니다.");
+          fetchData();
+        } catch (err) {
+          console.error("삭제 실패:", err);
+          alert("삭제 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 8. 검색 필터링
+      function filterTable() {
+        const query = document.getElementById("searchInput").value.toLowerCase().trim();
+        if (!query) {
+          renderTable(allData);
+          return;
+        }
+
+        const filtered = allData.filter((item) => {
+          const name = (item.name || "").toLowerCase();
+          const phone = (item.phone || "").toLowerCase();
+          const email = (item.email || "").toLowerCase();
+          const interest = (item.interest || "").toLowerCase();
+          return name.includes(query) || phone.includes(query) || email.includes(query) || interest.includes(query);
+        });
+
+        renderTable(filtered);
+      }
+
+      // 9. 엑셀(CSV) 다운로드
+      function exportToCSV() {
+        if (allData.length === 0) {
+          alert("다운로드할 데이터가 없습니다.");
+          return;
+        }
+
+        let csv = "상태,이름,연락처,이메일,관심분야,신청일시\n";
+        allData.forEach((item) => {
+          const status = item.status || "미확인";
+          const name = `"${(item.name || "").replace(/"/g, '""')}"`;
+          const phone = `"${(item.phone || "").replace(/"/g, '""')}"`;
+          const email = `"${(item.email || "").replace(/"/g, '""')}"`;
+          const interest = `"${(item.interest || "").replace(/"/g, '""')}"`;
+          const date = `"${(item.date || "").replace(/"/g, '""')}"`;
+          csv += `${status},${name},${phone},${email},${interest},${date}\n`;
+        });
+
+        // 한글 깨짐 방지 BOM 추가
+        const bom = "\uFEFF";
+        const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        
+        const today = new Date().toISOString().slice(0, 10);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `오르리_상담신청고객명단_${today}.csv`);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // HTML 특수문자 이스케이프 (보안)
+      function escapeHtml(str) {
+        if (typeof str !== "string") return str;
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+    </script>
+  </body>
+</html>
