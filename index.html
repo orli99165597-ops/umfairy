@@ -531,7 +531,7 @@
               <!-- 일러스트 영역 -->
               <div class="w-full md:w-1/2 flex justify-center">
                 <div
-                  class="relative w-3/4 md:w-full max-w-sm rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-neon/30 group bg-wine-dark flex items-center justify-center aspect-[1/1]"
+                  class="relative w-3/4 md:w-full max-w-sm rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-neon/30 group bg-wine-dark flex items-center justify-center aspect-[3/4]"
                 >
                   <img
                     src="illustration.png"
@@ -1674,7 +1674,8 @@
       }
 
       /* ── 1. IntersectionObserver: 페이드업 ── */
-      document.addEventListener("DOMContentLoaded", () => {
+      // DOMContentLoaded 중첩 제거 - 이미 DOM 로드 완료 후 실행되므로 즉시 실행
+      (function initFadeObserver() {
         const fadeEls = document.querySelectorAll(".fade-up-element");
         const observer = new IntersectionObserver(
           (entries, obs) => {
@@ -1685,7 +1686,7 @@
               }
             });
           },
-          { root: null, rootMargin: "0px", threshold: 0.12 },
+          { root: null, rootMargin: "0px", threshold: 0.05 },
         );
         fadeEls.forEach((el) => observer.observe(el));
 
@@ -1709,7 +1710,8 @@
         document.getElementById("adminPassword")?.addEventListener("keyup", (e) => {
           if (e.key === "Enter") checkAdminPassword();
         });
-      });
+      })(); // initFadeObserver IIFE 종료
+
 
       /* ── 2. 헤더 스크롤 효과 ── */
       window.addEventListener("scroll", () => {
